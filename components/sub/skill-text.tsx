@@ -26,14 +26,14 @@ export const SkillText = () => {
         variants={slideInFromLeft(0.5)}
         className="text-[30px] text-white font-medium mt-[10px] text-center mb-[15px]"
       >
-        Making apps with modern technologies.
+       Embracing complexity to deliver simplicity and excellence with modern technologies.
       </motion.div>
 
       <motion.div
         variants={slideInFromRight(0.5)}
-        className="cursive text-[20px] text-gray-200 mb-10 mt-[10px] text-center"
+        className="cursive text-[25px] text-gray-200 mb-10 mt-[10px] text-center"
       >
-        Never miss a task, deadline or idea.
+        Think Beyond task, Never miss goal.
       </motion.div>
     </div>
   );

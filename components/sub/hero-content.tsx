@@ -33,11 +33,14 @@ export const HeroContent = () => {
           className="flex flex-col gap-6 mt-6 text-6xl text-bold text-white max-w-[600px] w-auto h-auto"
         >
           <span>
-            Providing{" "}
+          Turning  {" "}
             <span className="text-transparent bg-clip-text bg-gradient-to-r from-purple-500 to-cyan-500">
-              the best
+             Visions
             </span>{" "}
-            project experience.
+            into magnificent{" "}
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-purple-500 to-cyan-500">
+            realities.
+            </span>{" "} 
           </span>
         </motion.div>
 
@@ -45,8 +48,10 @@ export const HeroContent = () => {
           variants={slideInFromLeft(0.8)}
           className="text-lg text-gray-400 my-5 max-w-[600px]"
         >
-          I&apos;m a Full Stack Software Engineer with experience in Website,
-          Mobile, and Software development. Check out my projects and skills.
+         I’m {" "}
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-purple-500 to-cyan-500">
+            Haroun Bayoudh 
+            </span>{" "}, a seasoned Full Stack Software Engineer with expertise in developing dynamic websites, integrating CMS platforms, building SaaS solutions, and streamlining ERP systems. My projects reflect a commitment to innovation, precision, and delivering top-tier solutions. Explore my portfolio to see the skills that set me apart.
         </motion.p>
 
         <motion.a

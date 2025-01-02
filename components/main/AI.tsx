@@ -5,7 +5,7 @@ import Image from "next/image";
 
 import { slideInFromTop } from "@/lib/motion";
 
-export const Encryption = () => {
+export const AI = () => {
   return (
     <div className="flex flex-row relative items-center justify-center min-h-screen w-full h-full -z-20">
       <div className="absolute w-auto h-auto top-0 z-[5]">
@@ -13,40 +13,43 @@ export const Encryption = () => {
           variants={slideInFromTop}
           className="text-[40px] font-medium text-center text-gray-200"
         >
-          Performance{" "}
+          Artificial{" "}
           <span className="text-transparent bg-clip-text bg-gradient-to-r from-purple-500 to-cyan-500">
             &
           </span>{" "}
-          security.
+          Inteligence.
         </motion.div>
       </div>
 
       <div className="flex flex-col items-center justify-center translate-y-[-50px] absolute z-[20] w-auto h-auto">
         <div className="flex flex-col items-center group cursor-pointer w-auto h-auto">
           <Image
-            src="/lock-top.png"
-            alt="Lock top"
-            width={50}
-            height={50}
-            className="translate-y-5 transition-all duration-200 group-hover:translate-y-11"
-          />
-          <Image
-            src="/lock-main.png"
-            alt="Lock main"
-            width={70}
-            height={70}
+            src="/ai.png"
+            alt="ai main"
+            width={130}
+            height={130}
             className="z-10"
           />
         </div>
 
         <div className="Welcome-box px-[15px] py-[4px] z-[20] border my-[20px] border-[#7042F88B] opacity-[0.9]">
-          <h1 className="Welcome-text text-[12px]">Encryption</h1>
+          <h1 className="Welcome-text text-[12px]">AI</h1>
         </div>
+      <div className="Welcome-box px-[15px] py-[4px] z-[20] border my-[20px] border-[#7042F88B] opacity-[0.9]">
+      <div class="container">
+        <div class="line line1"> Object Detection...</div>
+        <div class="line line2">Use Cases of Vision AI...</div>
+        <div class="line line3">Cloud-Based Vision AI...</div>
+        <div class="line line4">Extract Text and Insights from Documents with Generative AI...</div>
       </div>
-
-      <div className="absolute z-[20] bottom-[10px] px-[5px]">
-        <div className="cursive text-[25px] font-medium text-center text-gray-300">
-          Secure your data with end-to-end encryption. 
+        
+      </div>
+      </div>
+         
+      <div className="absolute z-[20] bottom-[10px] px-[5px] ">
+            
+        <div className=" cursive text-[25px] font-medium text-center text-gray-300">
+        Empower innovation with intelligent Atificial Inteligence.
         </div>
       </div>
 
@@ -59,7 +62,7 @@ export const Encryption = () => {
           preload="false"
           className="w-full h-auto"
         >
-          <source src="/videos/encryption-bg.webm" type="video/webm" />
+          <source src="/videos/Ai.webm" type="video/webm" />
         </video>
       </div>
     </div>

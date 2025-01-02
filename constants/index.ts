@@ -92,7 +92,7 @@ export const SOCIALS = [
   {
     name: "Instagram",
     icon: RxInstagramLogo,
-    link: "https://instagram.com",
+    link: "https://www.instagram.com/starckaxel/",
   },
   {
     name: "Facebook",
@@ -259,26 +259,34 @@ export const OTHER_SKILL = [
 
 export const PROJECTS = [
   {
-    title: "Modern Next.js 14 Portfolio",
+    title: "Senior Backend Engineer – ERP Integration and Slot Management System Specialist",
     description:
-      'Embark on a journey through my professional evolution with the "Modern Next.js Portfolio" - a dynamic showcase of my skills, experiences, and passion for web development. Crafted with precision and powered by Next.js, this portfolio is more than just a static display; it\'s an immersive experience that reflects the cutting edge of modern web technologies.',
+      'Led the reengineering of the slot management system, ensuring seamless data synchronization with real estate agencies. The project involved switching the client s platform from an outdated system to a modern ERP-integrated infrastructure, streamlining data handling and operational workflows. Developed custom APIs to synchronize slot availability and bookings in real time, providing enhanced collaboration between travel and real estate partners. Managed major updates to enhance platform performance, scalability, and reliability, positioning the client for better market adaptability and improved customer service..',
     image: "/projects/project-1.png",
-    link: "https://example.com",
+    link: "https://www.ibindo.at",
   },
   {
-    title: "Interactive Cards Portfolio",
+    title: "Lead Software Engineer – Cloud Platform Redevelopment Specialist",
     description:
-      'Step into the extraordinary world of my professional journey through the "Interactive Cards Portfolio" - an innovative and visually captivating platform that redefines the traditional portfolio experience. Ditching the conventional static layout, this portfolio leverages interactive cards to showcase my skills, projects, and personality in an engaging and dynamic manner.',
+      'Redesigned and redeveloped the ArkanCloud platform from scratch, focusing on creating a robust, modern, and visually captivating website. Ensured exceptional site speed and performance to deliver a seamless user experience, enabling smooth interaction with the platform. The new design combines aesthetic appeal with usability, aligning with the latest trends in cloud provider websites. This redevelopment enhanced both the platform’s attractiveness and functionality, solidifying its position in the competitive cloud services industry.',
     image: "/projects/project-2.png",
     link: "https://example.com",
   },
   {
-    title: "Space Themed Website",
+    title: "E-commerce Transformation Maestro Ellis Excellence Limited",
     description:
-      'Embark on an interstellar journey with my "Space Themed Website", a mesmerizing space-themed website that invites you to explore the cosmic wonders beyond our world. Immerse yourself in an awe-inspiring digital experience that blends cutting-edge design with the mysteries of the universe.',
+      'Ellis Excellence Limited embarked on a transformative journey to overcome challenges and unlock the full potential of their Magento 1 platform, infusing it with the spirit of excellence and innovation. With a deep sense of determination and purpose, they tackled the task of fixing inventory and restocking issues, ensuring that their online store could efficiently manage stock levels and meet customer demands.',
     image: "/projects/project-3.png",
     link: "https://example.com",
   },
+  {
+    title: "E-commerce Solutions Artisan",
+    description:
+      'Kreativ.team UG embarked on a comprehensive project focusing on development for PrestaShop, Shopware, and TYPO3 platforms, specializing in creating custom plugins and modules tailored to specific client needs. The project aimed to enhance the functionality and user experience of these e-commerce and content management systems.',
+    image: "/projects/project-3.png",
+    link: "https://example.com",
+  },
+  
 ] as const;
 
 export const FOOTER_DATA = [
@@ -293,7 +301,7 @@ export const FOOTER_DATA = [
       {
         name: "GitHub",
         icon: RxGithubLogo,
-        link: "https://github.com",
+        link: "https://github.com/tolgase",
       },
       {
         name: "Discord",
@@ -308,17 +316,17 @@ export const FOOTER_DATA = [
       {
         name: "Instagram",
         icon: RxInstagramLogo,
-        link: "https://instagram.com",
+        link: "https://www.instagram.com/starckaxel/",
       },
       {
         name: "Twitter",
         icon: RxTwitterLogo,
-        link: "https://twitter.com",
+        link: "https://x.com/Aaronbayou1140",
       },
       {
         name: "Linkedin",
         icon: RxLinkedinLogo,
-        link: "https://linkedin.com",
+        link: "https://www.linkedin.com/in/haroun-bayoudh-9a1a10209/",
       },
     ],
   },
@@ -360,5 +368,5 @@ export const NAV_LINKS = [
 ] as const;
 
 export const LINKS = {
-  sourceCode: "https://github.com/sanidhyy/space-portfolio",
+  sourceCode: "https://github.com/tolgase",
 };

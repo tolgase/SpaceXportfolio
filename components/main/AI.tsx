@@ -35,15 +35,14 @@ export const AI = () => {
         <div className="Welcome-box px-[15px] py-[4px] z-[20] border my-[20px] border-[#7042F88B] opacity-[0.9]">
           <h1 className="Welcome-text text-[12px]">AI</h1>
         </div>
-      <div className="Welcome-box px-[15px] py-[4px] z-[20] border my-[20px] border-[#7042F88B] opacity-[0.9]">
-      <div class="container">
-        <div class="line line1"> Object Detection...</div>
-        <div class="line line2">Use Cases of Vision AI...</div>
-        <div class="line line3">Cloud-Based Vision AI...</div>
-        <div class="line line4">Extract Text and Insights from Documents with Generative AI...</div>
-      </div>
-        
-      </div>
+        <div className="Welcome-box px-[15px] py-[4px] z-[20] border my-[20px] border-[#7042F88B] opacity-[0.9]">
+  <div className="container">
+    <div className="line line1"> Object Detection...</div>
+    <div className="line line2">Use Cases of Vision AI...</div>
+    <div className="line line3">Cloud-Based Vision AI...</div>
+  </div>
+</div>
+
       </div>
          
       <div className="absolute z-[20] bottom-[10px] px-[5px] ">

@@ -99,6 +99,7 @@ export const AiChatWidget = () => {
   return (
     <div
       ref={ref}
+      data-ai-chat-card
       className="liquid-glass chat-widget-glow w-full flex flex-col items-stretch overflow-hidden rounded-2xl"
     >
       <div className="relative z-[5] flex items-center gap-2 px-4 py-3 border-b border-[var(--accent-border)]">

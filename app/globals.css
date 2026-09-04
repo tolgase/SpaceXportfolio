@@ -4,6 +4,95 @@
 @tailwind components;
 @tailwind utilities;
 
+/*
+ * Theme accent tokens. Night (default) is the original purple/cyan
+ * palette; day mode (set via data-theme="day" on <html>, driven by
+ * HeroThemeProvider) swaps every accent to a warm amber/orange/gold
+ * "sunlight" palette so the navbar, scroll progress bar, and every
+ * section's gradients/borders/glows re-skin together automatically.
+ */
+:root {
+  --accent-from: #a855f7; /* purple-500 */
+  --accent-via: #e879f9; /* fuchsia-400 */
+  --accent-to: #06b6d4; /* cyan-500 */
+  --accent-solid: rgb(112, 66, 248);
+  --accent-border: #7042f88b;
+  --accent-border-solid: #2a0e61;
+  --accent-shadow: #2a0e6180;
+  --accent-pill-border: rgba(112, 66, 248, 0.38);
+  --accent-pill-bg: rgba(3, 0, 20, 0.37);
+  --navbar-bg: rgba(3, 0, 20, 0.153);
+  --accent-glow: #bf97ff3d;
+  --accent-glow-strong: #bf97ff70;
+  --accent-welcome-shadow: #a48fff1f;
+  --accent-welcome-gradient: linear-gradient(
+    90.01deg,
+    #e59cff 0.01%,
+    #ba9cff 50.01%,
+    #9cb2ff 100%
+  );
+  --accent-button-bg: linear-gradient(
+      180deg,
+      rgba(60, 8, 126, 0) 0%,
+      rgba(60, 8, 126, 0.32) 100%
+    ),
+    rgba(113, 47, 255, 0.12);
+  --accent-button-bg-hover: linear-gradient(
+      180deg,
+      rgba(60, 8, 126, 0) 0%,
+      rgba(60, 8, 126, 0.42) 100%
+    ),
+    rgba(113, 47, 255, 0.24);
+}
+
+[data-theme="day"] {
+  --accent-from: #f59e0b; /* amber-500 */
+  --accent-via: #fb923c; /* orange-400 */
+  --accent-to: #facc15; /* yellow-400 */
+  --accent-solid: rgb(245, 158, 11);
+  --accent-border: #f5a623b3;
+  --accent-border-solid: #7a4a00;
+  --accent-shadow: #7a4a0080;
+  --accent-pill-border: rgba(245, 158, 11, 0.45);
+  --accent-pill-bg: rgba(26, 15, 0, 0.4);
+  --navbar-bg: rgba(26, 15, 0, 0.18);
+  --accent-glow: #ffcf7a55;
+  --accent-glow-strong: #ffcf7a90;
+  --accent-welcome-shadow: #ffd08a40;
+  --accent-welcome-gradient: linear-gradient(
+    90.01deg,
+    #ffe9b8 0.01%,
+    #ffcf80 50.01%,
+    #ffb199 100%
+  );
+  --accent-button-bg: linear-gradient(
+      180deg,
+      rgba(126, 66, 8, 0) 0%,
+      rgba(126, 66, 8, 0.32) 100%
+    ),
+    rgba(255, 158, 47, 0.14);
+  --accent-button-bg-hover: linear-gradient(
+      180deg,
+      rgba(126, 66, 8, 0) 0%,
+      rgba(126, 66, 8, 0.42) 100%
+    ),
+    rgba(255, 158, 47, 0.26);
+}
+
+/*
+ * Smooth cross-fade whenever the day/night data-theme attribute flips and
+ * every accent CSS variable above changes value. Scoped to color-related
+ * properties only (never transform) so it never fights framer-motion or
+ * Tailwind's own hover/scroll animations — a more specific rule on any
+ * element simply wins over this one.
+ */
+*,
+*::before,
+*::after {
+  transition: background-color 0.5s ease, border-color 0.5s ease,
+    box-shadow 0.5s ease, color 0.5s ease, fill 0.5s ease, stroke 0.5s ease;
+}
+
 .cursive {
   font-family: "Cedarville Cursive", cursive;
 }
@@ -13,11 +102,12 @@
       rgba(255, 255, 255, 0.4),
       rgba(255, 255, 255, 0.4)
     ),
-    linear-gradient(90.01deg, #e59cff 0.01%, #ba9cff 50.01%, #9cb2ff 100%);
+    var(--accent-welcome-gradient);
   background-blend-mode: normal, screen;
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;
+  transition: background 0.4s ease;
 }
 .Welcome-box {
   isolation: isolate;
@@ -26,7 +116,7 @@
   -webkit-backdrop-filter: blur(6px);
   backdrop-filter: blur(6px);
   border-radius: 32px;
-  box-shadow: inset 0 -7px 11px #a48fff1f;
+  box-shadow: inset 0 -7px 11px var(--accent-welcome-shadow);
   display: flex;
 
   position: relative;
@@ -36,22 +126,82 @@
 }
 
 .button-primary {
-  background: linear-gradient(
-      180deg,
-      rgba(60, 8, 126, 0) 0%,
-      rgba(60, 8, 126, 0.32) 100%
-    ),
-    rgba(113, 47, 255, 0.12);
-  box-shadow: inset 0 0 12px #bf97ff3d;
+  background: var(--accent-button-bg);
+  box-shadow: inset 0 0 12px var(--accent-glow);
+  transition: background 0.4s ease, box-shadow 0.4s ease;
 }
 .button-primary:hover {
-  background: linear-gradient(
-      180deg,
-      rgba(60, 8, 126, 0) 0%,
-      rgba(60, 8, 126, 0.42) 100%
-    ),
-    rgba(113, 47, 255, 0.24);
-  box-shadow: inset 0 0 12px #bf97ff70;
+  background: var(--accent-button-bg-hover);
+  box-shadow: inset 0 0 12px var(--accent-glow-strong);
+}
+
+/*
+ * "Liquid glass" card treatment: a frosted base layer (background, border,
+ * shadow) with real refraction, not a WebGL/DOM-snapshot library.
+ * `backdrop-filter` references the #glassCardRefraction SVG filter
+ * (feTurbulence + feDisplacementMap, defined once in
+ * components/main/glass-refraction-filters.tsx and rendered sitewide from
+ * app/layout.tsx), which genuinely bends the pixels behind each card — the
+ * starfield, gradients, the encryption section's video — the same way real
+ * glass does, at 60fps, with zero JS and nothing that can hang or fail to
+ * load. Blur is layered after the displacement so the warped backdrop still
+ * reads as frosted rather than sharp/noisy.
+ */
+.liquid-glass {
+  position: relative;
+  isolation: isolate;
+  /* Barely-there tint — the point of glass is that you see *through* it.
+     The old 0.08 white fill plus a 0.3-opacity white border and a 0.15
+     inset highlight added up to a visibly whitish, opaque-looking panel
+     ("frosted paper" rather than "glass"). Cut all three back so the
+     backdrop-filter displacement below is what reads, not a white wash. */
+  background: rgba(255, 255, 255, 0.035);
+  -webkit-backdrop-filter: blur(20px);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.16),
+    0 0 0 0.5px rgba(255, 255, 255, 0.06) inset;
+}
+/* Progressive enhancement: browsers that understand an SVG-filter reference
+   inside backdrop-filter get the real displacement; everything else quietly
+   keeps the plain blur above instead of an invalid/dropped declaration. */
+@supports (backdrop-filter: url(#a)) or (-webkit-backdrop-filter: url(#a)) {
+  .liquid-glass {
+    -webkit-backdrop-filter: url(#glassCardRefraction) blur(9px);
+    backdrop-filter: url(#glassCardRefraction) blur(9px);
+  }
+}
+@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+  /* Browsers without backdrop-filter support fall back to a solid card
+     rather than an unstyled/broken one. */
+  .liquid-glass {
+    background-color: rgba(3, 0, 20, 0.85);
+  }
+}
+
+/*
+ * Attention-grabbing breathing glow for the AI chat widget — reuses the
+ * existing accent-glow tokens (same ones .button-primary already pulses on
+ * hover) rather than introducing a new color, so it reads as "part of the
+ * site" instead of a garish add-on. The box-shadow animation overrides
+ * .liquid-glass's static box-shadow for the duration of the animation, and
+ * is automatically flattened to a single frame by the sitewide
+ * prefers-reduced-motion rule below.
+ */
+@keyframes chat-glow-pulse {
+  0%,
+  100% {
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08),
+      0 0 0 0.5px rgba(255, 255, 255, 0.15) inset, 0 0 0 0 var(--accent-glow-strong);
+  }
+  50% {
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08),
+      0 0 0 0.5px rgba(255, 255, 255, 0.15) inset,
+      0 0 28px 7px var(--accent-glow-strong);
+  }
+}
+.chat-widget-glow {
+  animation: chat-glow-pulse 2.8s ease-in-out infinite;
 }
 
 /* Hide scrollbar for IE, Edge and Firefox */
@@ -65,6 +215,20 @@
 
 html {
   scroll-behavior: smooth;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }
 
 .container {

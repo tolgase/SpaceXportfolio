@@ -34,3 +34,10 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# local tooling / assistant artifacts — not part of the app
+/.agents/
+/.claude/
+/_to_delete/
+/_uupm_extracted/
+/_uupm_update.zip

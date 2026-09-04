@@ -9,7 +9,7 @@
     "lint": "next lint"
   },
   "author": {
-    "name": "H7r0un B7y0ud",
+    "name": "Haroun Bayoudh",
     "email": "haroun@sync.tn",
     "url": "https://github.com/tolgase"
   },
@@ -71,6 +71,7 @@
     "@react-three/fiber": "^8.15.13",
     "clsx": "^2.1.0",
     "framer-motion": "^10.17.12",
+    "lottie-react": "^3.1.1",
     "next": "14.2.10",
     "react": "^18",
     "react-dom": "^18",
@@ -80,7 +81,7 @@
     "three": "^0.160.0"
   },
   "devDependencies": {
-    "@types/node": "^20",
+    "@types/node": "20.19.43",
     "@types/react": "^18",
     "@types/react-dom": "^18",
     "@types/three": "^0.171.0",
@@ -89,6 +90,6 @@
     "eslint-config-next": "14.0.4",
     "postcss": "^8",
     "tailwindcss": "^3.3.0",
-    "typescript": "^5"
+    "typescript": "5.9.3"
   }
 }

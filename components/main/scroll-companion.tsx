@@ -1,20 +1,10 @@
 "use client";
 
 import { AnimatePresence, motion } from "framer-motion";
-import dynamic from "next/dynamic";
 import { useEffect, useRef, useState } from "react";
 
 import { useHeroTheme } from "@/lib/hero-theme-context";
 import { cn } from "@/lib/utils";
-
-// lottie-react touches `document`/`navigator` at import time, which breaks
-// Next's server render of a "use client" component — load it client-only.
-// (v3's `Lottie` is a named export, not the module default, and takes the
-// animation as `src` — a URL it fetches itself — rather than a pre-fetched
-// `animationData` object.)
-const Lottie = dynamic(() => import("lottie-react").then((mod) => mod.Lottie), {
-  ssr: false,
-});
 
 type SectionKey = "hero" | "about-me" | "skills" | "ai" | "encryption" | "projects";
 
@@ -86,21 +76,32 @@ const clamp01 = (n: number) => Math.min(1, Math.max(0, n));
 //    so the caption reads like a light intro at first glance and a real
 //    pitch if they actually linger. A repeat visit to a section skips the
 //    plain intro since they've already seen it.
-// 2. An O2 tether — a small gauge shows an oxygen percentage that starts low
-//    and fills as the visitor scrolls toward the bottom of the page. Every
-//    time a new section is entered, the cord "docks" to a fresh tank (a
-//    small icon pulses in) as a little reward beat.
+// 2. An O2 gauge — built into the suit's backpack corner (no dangling
+//    cord), showing an oxygen percentage that starts low and fills as the
+//    visitor scrolls toward the bottom of the page. Every time a new
+//    section is entered, a fresh tank icon docks in as a little reward
+//    beat.
 // 3. AI fusion — when the AI Assistant section is active, the astronaut
-//    detaches from the left-edge column and docks into the chat widget
-//    itself, with a glowing connector running from him to the card. Scroll
-//    past it and he undocks and resumes his normal downward travel.
+//    detaches from the left-edge column and docks beside the chat widget
+//    itself, with a single glowing connector running from him to the card
+//    (his usual caption bubble steps aside for a compact "linked" badge, so
+//    there's only ever one message card on screen). Scroll past it and he
+//    undocks and resumes his normal downward travel.
+// 4. Topic reactions — a plasma shield fades in near his hand while the
+//    security/encryption section is active, on top of the per-section hue
+//    shift every section gets.
 //
-// The astronaut is a small self-authored Lottie animation
-// (public/lottie/ai-buddy-{night,day}.json) rather than a third-party embed,
-// so there's no CDN/license/runtime-hang risk. Two color variants (accent
-// purple for night mode, accent amber for day) are swapped by src — the same
-// pattern hero.tsx already uses for its day/night background video — since a
-// static Lottie file can't read CSS custom properties.
+// The astronaut is a static illustration (public/astronaut-buddy.png, a
+// cropped/resized export of the free LottieFiles "Astronaut" animation at
+// https://lottiefiles.com/free-animation/astronaut-km42ScPs6r — its free
+// Lottie JSON export turned out to be a single flattened raster frame with
+// no internal keyframes on the character, so there's nothing gained by
+// paying the lottie-react runtime + JSON payload cost to play it "live").
+// All of his motion — travel position, dock/undock spring, hover/click
+// scale, and the per-section mood — is driven externally the same way it
+// already was: a CSS hue-rotate filter reacts to both the active section
+// (SECTION_MOOD_HUE) and day/night mode, so one PNG still reads as
+// "reacting" to context without needing separate day/night art files.
 export const ScrollCompanion = () => {
   const { mode } = useHeroTheme();
   const [activeSection, setActiveSection] = useState<SectionKey>("hero");
@@ -125,10 +126,12 @@ export const ScrollCompanion = () => {
 
   // O2 gauge DOM refs — updated imperatively every frame (like position
   // above) rather than through React state, so a continuous 60fps value
-  // doesn't trigger a re-render on every tick.
+  // doesn't trigger a re-render on every tick. The gauge is mounted flush
+  // against the suit's backpack corner — no free-floating cord — so it
+  // reads as a real instrument built into the suit rather than a prop
+  // dangling off it.
   const gaugeRingRef = useRef<HTMLDivElement>(null);
   const gaugeTextRef = useRef<HTMLSpanElement>(null);
-  const cordPathRef = useRef<SVGPathElement>(null);
 
   // Dwell-time bookkeeping for the messaging formula.
   const activeSectionRef = useRef<SectionKey>("hero");
@@ -209,10 +212,6 @@ export const ScrollCompanion = () => {
       }
       if (gaugeTextRef.current) {
         gaugeTextRef.current.textContent = `${oxygenPct}%`;
-      }
-      if (cordPathRef.current) {
-        cordPathRef.current.style.stroke = `hsl(${hue} 80% 62%)`;
-        cordPathRef.current.style.opacity = String(0.35 + progress * 0.5);
       }
 
       // The connector beam while fused with the AI chat card — a glowing
@@ -332,19 +331,29 @@ export const ScrollCompanion = () => {
 
   const captionPool = SECTION_MESSAGES[activeSection];
   const captionText = captionPool[Math.min(messageTier, captionPool.length - 1)];
+  const showShield = activeSection === "encryption" && !reducedMotion;
+
+  // Fluid sizing (clamp between a mobile-safe floor and a desktop ceiling)
+  // so the companion scales continuously with viewport width instead of
+  // jumping between two fixed breakpoints — the same character reads right
+  // from a small tablet up through an ultra-wide monitor.
+  const charSize = "clamp(5.5rem, 8vw, 9rem)";
+  const gaugeSize = "clamp(1.7rem, 2.1vw, 2.25rem)";
 
   return (
     <>
       {/* Connector beam, shown only while docked/fused with the AI chat
           card — positioned in fixed viewport coordinates independently of
-          the companion's own wrapper transform. */}
+          the companion's own wrapper transform. companion-beam animates a
+          traveling highlight so it reads as signal flowing to the card. */}
       <div
         ref={beamRef}
         aria-hidden
-        className="hidden sm:block fixed z-30 h-[2px] origin-left rounded-full pointer-events-none transition-opacity duration-300"
+        className="companion-beam hidden sm:block fixed z-30 h-[2px] origin-left rounded-full pointer-events-none transition-opacity duration-500"
         style={{
           opacity: 0,
-          background: "linear-gradient(90deg, var(--accent-solid), transparent)",
+          backgroundImage:
+            "linear-gradient(90deg, transparent, var(--accent-solid) 35%, var(--accent-solid) 65%, transparent)",
           boxShadow: "0 0 10px 1px var(--accent-glow-strong)",
         }}
       />
@@ -354,7 +363,7 @@ export const ScrollCompanion = () => {
         style={{ top: "14%", left: "12px" }}
         className="hidden sm:flex fixed z-40 items-center gap-6 md:gap-7"
       >
-        <div className="relative w-28 h-28 md:w-36 md:h-36 shrink-0">
+        <div className="relative shrink-0" style={{ width: charSize, height: charSize }}>
           <motion.div
             key={activeSection}
             initial={{ scale: 0.85 }}
@@ -367,60 +376,94 @@ export const ScrollCompanion = () => {
               onClick={goToAssistant}
               aria-label="Chat with the AI assistant"
               title="Chat with my AI assistant"
-              style={{ filter: `hue-rotate(${SECTION_MOOD_HUE[activeSection]}deg)`, transition: "filter 0.6s ease" }}
+              style={{
+                filter: `hue-rotate(${SECTION_MOOD_HUE[activeSection] + (mode === "day" ? 25 : 0)}deg) ${
+                  mode === "day" ? "saturate(1.15) brightness(1.05)" : ""
+                }`,
+                transition: "filter 0.6s ease",
+              }}
               className={cn(
                 "w-full h-full cursor-pointer transition-transform duration-500 hover:scale-110 focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent-solid)] rounded-full",
                 fused && "scale-90"
               )}
             >
-              <Lottie
-                src={mode === "day" ? "/lottie/ai-buddy-day.json" : "/lottie/ai-buddy-night.json"}
-                loop={!reducedMotion}
-                autoplay={!reducedMotion}
-                style={{ width: "100%", height: "100%" }}
+              {/* eslint-disable-next-line @next/next/no-img-element -- fixed
+                  small decorative icon at a controlled resolution; next/image
+                  adds no benefit here and its `fill` mode fights the
+                  motion.div/button wrappers' own sizing. */}
+              <img
+                src="/astronaut-buddy.png"
+                alt="AI assistant astronaut"
+                draggable={false}
+                style={{ width: "100%", height: "100%", objectFit: "contain", userSelect: "none" }}
               />
             </button>
           </motion.div>
 
-          {/* O2 tether: a cord running from the astronaut's tank out to a
-              side-mounted percentage gauge — starts low and fills as the
-              visitor scrolls, turning scroll progress into "helping him
-              refill oxygen". Mounted beside (not below) the character so it
-              doesn't add extra height on top of already-dense hero content. */}
-          <svg
-            viewBox="0 0 100 100"
-            preserveAspectRatio="none"
-            className="pointer-events-none absolute top-0 -right-3 w-8 h-full md:-right-4 md:w-9"
-          >
-            <path
-              ref={cordPathRef}
-              d="M4,58 C20,66 6,74 32,80 C48,84 46,90 50,96"
-              fill="none"
-              stroke="hsl(6 80% 62%)"
-              strokeWidth={5}
-              strokeLinecap="round"
-              style={{ transition: "stroke 0.2s linear, opacity 0.2s linear" }}
-            />
-          </svg>
+          {/* Topic reaction: a plasma shield he "raises" while the
+              security/encryption section is active — a themed reaction
+              distinct from the mood hue-shift every section gets. */}
+          <AnimatePresence>
+            {showShield && (
+              <motion.svg
+                key="plasma-shield"
+                viewBox="0 0 60 72"
+                initial={{ opacity: 0, scale: 0.6, x: -6, rotate: -8 }}
+                animate={{ opacity: 1, scale: 1, x: 0, rotate: 0 }}
+                exit={{ opacity: 0, scale: 0.6, x: -6 }}
+                transition={{ type: "spring", stiffness: 220, damping: 16 }}
+                className="pointer-events-none absolute -left-[18%] top-[30%] w-[42%] h-[52%] drop-shadow-[0_0_10px_var(--accent-glow-strong)]"
+              >
+                <motion.path
+                  d="M30 2 L56 12 V34 C56 52 44 64 30 70 C16 64 4 52 4 34 V12 Z"
+                  fill="url(#plasmaShieldFill)"
+                  stroke="var(--accent-solid)"
+                  strokeWidth={2.5}
+                  animate={{ opacity: [0.55, 0.9, 0.55] }}
+                  transition={{ duration: 1.6, repeat: Infinity, ease: "easeInOut" }}
+                />
+                <defs>
+                  <radialGradient id="plasmaShieldFill" cx="50%" cy="35%" r="70%">
+                    <stop offset="0%" stopColor="var(--accent-solid)" stopOpacity={0.55} />
+                    <stop offset="100%" stopColor="var(--accent-solid)" stopOpacity={0.08} />
+                  </radialGradient>
+                </defs>
+              </motion.svg>
+            )}
+          </AnimatePresence>
+
+          {/* O2 gauge — mounted flush against the suit's backpack corner,
+              no free-floating cord, so it reads as a built-in instrument
+              rather than a prop dangling off the character. Level starts
+              low and fills as the visitor scrolls; the ring's fill color
+              sweeps red-to-green with it, while the label itself stays a
+              crisp, always-legible green. */}
           <div
             ref={gaugeRingRef}
             className={cn(
-              "absolute top-1/2 -right-3 md:-right-4 w-8 h-8 md:w-9 md:h-9 -translate-y-1/2 rounded-full flex items-center justify-center shadow-lg transition-transform duration-300",
+              "absolute bottom-[6%] right-[2%] flex items-center justify-center rounded-full shadow-lg ring-2 ring-[#0a0e2a] transition-transform duration-300",
               justEntered && "scale-[1.18]"
             )}
-            style={{ background: "conic-gradient(hsl(6 88% 58%) 14%, rgba(255,255,255,0.12) 14% 100%)" }}
+            style={{
+              width: gaugeSize,
+              height: gaugeSize,
+              background: "conic-gradient(hsl(6 88% 58%) 14%, rgba(255,255,255,0.12) 14% 100%)",
+            }}
             title="Oxygen level"
           >
-            <div className="w-[23px] h-[23px] md:w-[26px] md:h-[26px] rounded-full bg-[#0a0e2a] flex flex-col items-center justify-center leading-none">
-              <span className="text-[5px] md:text-[6px] font-semibold text-gray-400">O2</span>
-              <span ref={gaugeTextRef} className="text-[7px] md:text-[8px] font-bold text-gray-100 tabular-nums">
+            <div className="w-[78%] h-[78%] rounded-full bg-[#0a0e2a] flex flex-col items-center justify-center leading-none">
+              <span className="text-[6px] md:text-[7px] font-bold text-emerald-400">O2</span>
+              <span
+                ref={gaugeTextRef}
+                className="text-[7px] md:text-[8px] font-bold text-emerald-300 tabular-nums"
+              >
                 14%
               </span>
             </div>
           </div>
 
           {/* Reward beat: a fresh tank briefly docks in whenever a new
-              section is entered, tied to the same cord. */}
+              section is entered. */}
           <AnimatePresence>
             {justEntered && (
               <motion.div
@@ -428,7 +471,7 @@ export const ScrollCompanion = () => {
                 animate={{ opacity: 1, scale: 1, y: 0 }}
                 exit={{ opacity: 0, scale: 0.5 }}
                 transition={{ duration: 0.35 }}
-                className="absolute -top-2 -right-7 md:-right-8 flex items-center justify-center w-4 h-6 md:w-5 md:h-7 rounded-sm bg-white/10 border border-white/25 shadow-md"
+                className="absolute bottom-[24%] right-[-6%] flex items-center justify-center w-4 h-6 md:w-5 md:h-7 rounded-sm bg-white/10 border border-white/25 shadow-md"
                 title="New O2 tank"
               >
                 <span className="block w-[6px] h-3 md:w-2 md:h-4 rounded-[1px] bg-emerald-400/90" />
@@ -437,17 +480,39 @@ export const ScrollCompanion = () => {
           </AnimatePresence>
         </div>
 
+        {/* Exactly one message card on screen at a time: the usual
+            per-section caption, except while fused with the AI widget —
+            which already presents its own card — where it steps aside for
+            a compact "linked" pill instead. */}
         <AnimatePresence mode="wait">
-          <motion.div
-            key={`${activeSection}-${messageTier}`}
-            initial={{ opacity: 0, x: -8 }}
-            animate={{ opacity: 1, x: 0 }}
-            exit={{ opacity: 0, x: -8 }}
-            transition={{ duration: 0.3 }}
-            className="liquid-glass max-w-[200px] rounded-2xl px-4 py-2.5 text-sm md:text-[15px] font-medium leading-snug text-gray-100 shadow-lg"
-          >
-            {captionText}
-          </motion.div>
+          {fused ? (
+            <motion.div
+              key="linked-badge"
+              initial={{ opacity: 0, scale: 0.75, x: -8 }}
+              animate={{ opacity: 1, scale: 1, x: 0 }}
+              exit={{ opacity: 0, scale: 0.75, x: -8 }}
+              transition={{ type: "spring", stiffness: 300, damping: 22 }}
+              className="liquid-glass flex items-center gap-1.5 rounded-full px-3.5 py-1.5 text-xs md:text-sm font-medium text-emerald-300 shadow-lg"
+            >
+              <motion.span
+                animate={{ opacity: [0.4, 1, 0.4] }}
+                transition={{ duration: 1.4, repeat: Infinity }}
+                className="w-1.5 h-1.5 rounded-full bg-emerald-400"
+              />
+              Linked to AI Assistant
+            </motion.div>
+          ) : (
+            <motion.div
+              key={`${activeSection}-${messageTier}`}
+              initial={{ opacity: 0, x: -8 }}
+              animate={{ opacity: 1, x: 0 }}
+              exit={{ opacity: 0, x: -8 }}
+              transition={{ duration: 0.3 }}
+              className="liquid-glass max-w-[200px] rounded-2xl px-4 py-2.5 text-sm md:text-[15px] font-medium leading-snug text-gray-100 shadow-lg"
+            >
+              {captionText}
+            </motion.div>
+          )}
         </AnimatePresence>
       </div>
     </>

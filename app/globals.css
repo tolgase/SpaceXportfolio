@@ -204,6 +204,25 @@
   animation: chat-glow-pulse 2.8s ease-in-out infinite;
 }
 
+/* A traveling highlight along the astronaut's connector beam when he's
+ * docked with the AI chat widget — reads as "signal flowing toward the
+ * card" rather than a static line. Background-position animates across a
+ * gradient that's wider than the element, so the bright band sweeps along
+ * it and loops seamlessly.
+ */
+@keyframes beam-flow {
+  from {
+    background-position: 200% 0;
+  }
+  to {
+    background-position: -200% 0;
+  }
+}
+.companion-beam {
+  background-size: 200% 100%;
+  animation: beam-flow 1.4s linear infinite;
+}
+
 /* Hide scrollbar for IE, Edge and Firefox */
 .scrollbar-hidden {
   -ms-overflow-style: none; /* IE and Edge */

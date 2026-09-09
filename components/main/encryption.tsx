@@ -134,7 +134,10 @@ export const Encryption = () => {
             Haroun&apos;s work.
           </p>
         </div>
-        <div className="w-full max-w-4xl grid grid-cols-1 sm:grid-cols-2 gap-5 sm:gap-6">
+        <div
+          data-companion-dock="encryption"
+          className="w-full max-w-4xl grid grid-cols-1 sm:grid-cols-2 gap-5 sm:gap-6"
+        >
           <HashTool />
           <EncryptTool />
           <SecurityNews />

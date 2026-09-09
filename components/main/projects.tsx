@@ -38,6 +38,7 @@ export const Projects = () => {
 
       <motion.div
         style={{ y: gridY }}
+        data-companion-dock="projects"
         className="w-full max-w-7xl grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-6 sm:gap-8"
       >
         {PROJECTS.map((project, i) => (

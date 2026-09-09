@@ -30,7 +30,9 @@ export const Skills = () => {
       id="skills"
       className="flex flex-col items-center justify-center gap-3 h-full relative overflow-hidden py-16 sm:py-20 px-4 sm:scale-95 lg:scale-90"
     >
-      <SkillText />
+      <div data-companion-dock="skills">
+        <SkillText />
+      </div>
 
       <div className="flex flex-row justify-center flex-wrap mt-4 gap-4 sm:gap-5 items-center max-w-4xl">
         {SKILL_DATA.map((skill, i) => (

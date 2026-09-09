@@ -63,6 +63,12 @@ const SECTION_MOOD_HUE: Record<SectionKey, number> = {
 
 const clamp01 = (n: number) => Math.min(1, Math.max(0, n));
 
+// Horizontal breathing room kept between the astronaut's right edge and
+// whatever dock target (chat widget, skills grid, project cards, ...) he's
+// settled beside — measured against the character's own current on-screen
+// width, so the gap stays proportional as he scales across viewport sizes.
+const DOCK_GAP_PX = 24;
+
 // A small floating "virtual assistant" companion — an astronaut — that
 // travels down the left edge of the page in sync with scroll progress, and
 // calls out a caption for whichever section is currently in view (tracked
@@ -81,15 +87,23 @@ const clamp01 = (n: number) => Math.min(1, Math.max(0, n));
 //    visitor scrolls toward the bottom of the page. Every time a new
 //    section is entered, a fresh tank icon docks in as a little reward
 //    beat.
-// 3. AI fusion — when the AI Assistant section is active, the astronaut
-//    detaches from the left-edge column and docks beside the chat widget
-//    itself, with a single glowing connector running from him to the card
-//    (his usual caption bubble steps aside for a compact "linked" badge, so
-//    there's only ever one message card on screen). Scroll past it and he
-//    undocks and resumes his normal downward travel.
+// 3. Section docking — every section can offer a "dock point" (its main
+//    card/widget) via a `data-companion-dock="<section>"` attribute on that
+//    element. When one is present and on screen, the astronaut detaches
+//    from the left-edge column and settles beside it with a real measured
+//    gap (never touching it) instead of just hugging the left edge; a
+//    section with no dock point (or one that isn't visible yet) falls back
+//    to the classic left-edge travel. The AI section is a special case of
+//    this same mechanism: it additionally runs a single glowing connector
+//    from the astronaut to the chat widget, and his usual caption bubble
+//    steps aside for a compact "linked" badge so there's only ever one
+//    message card on screen. Scroll past a dock point and he undocks and
+//    resumes normal travel.
 // 4. Topic reactions — a plasma shield fades in near his hand while the
-//    security/encryption section is active, on top of the per-section hue
-//    shift every section gets.
+//    security/encryption section is active, and a brief signal-pulse glow
+//    flashes near the top of his helmet whenever he arrives/docks at a new
+//    section ("thinking" beat) — both on top of the per-section hue shift
+//    every section gets.
 //
 // The astronaut is a static illustration (public/astronaut-buddy.png, a
 // cropped/resized export of the free LottieFiles "Astronaut" animation at
@@ -153,39 +167,59 @@ export const ScrollCompanion = () => {
 
       let targetTop: number;
       let targetLeft: number;
+      let docked = false;
 
-      if (isFused) {
-        // Dock beside the AI chat widget itself, wherever it actually sits
-        // on the page, rather than assuming a fixed layout.
-        const card = document.querySelector<HTMLElement>("[data-ai-chat-card]");
-        const rect = card?.getBoundingClientRect();
-        if (rect) {
-          targetTop = rect.top + rect.height * 0.1;
-          targetLeft = Math.max(baseLeft, rect.left - 104);
-        } else {
-          targetTop = window.innerHeight * 0.4;
-          targetLeft = baseLeft;
-        }
-      } else if (reducedMotion) {
+      if (reducedMotion) {
         targetTop = window.innerHeight * 0.4;
         targetLeft = baseLeft;
       } else {
-        // Travel range kept clear of the fixed navbar (84px tall) at the
-        // top, and nudged up slightly at the low end so the astronaut
-        // doesn't sit on top of the hero's "Fullstack Developer Portfolio"
-        // pill.
-        targetTop = window.innerHeight * (0.12 + progress * (0.78 - 0.12));
-        targetLeft = baseLeft;
+        // Every section can offer a dock point (its main card/widget) via a
+        // `data-companion-dock="<section>"` attribute, wherever that element
+        // actually sits on the page — so the astronaut settles beside real
+        // content instead of always hugging the left edge. Sections without
+        // one (or whose target isn't rendered/visible yet) fall through to
+        // the classic left-edge travel.
+        const dockEl = document.querySelector<HTMLElement>(
+          `[data-companion-dock="${activeSectionRef.current}"]`
+        );
+        const dockRect = dockEl?.getBoundingClientRect();
+        // Measured against the whole group's current rendered width
+        // (character + gap + caption bubble) so the caption itself never
+        // creeps back in under the dock target — a gap sized only for the
+        // character would leave the caption, which sits further right in
+        // the same flex row, overlapping the dock content.
+        const wrapperWidth = wrapperRef.current?.offsetWidth || 110;
+        // Only actually dock if there's real room for the whole group
+        // between the left edge and the target — on a narrow viewport, or a
+        // dock target (like the projects grid) that starts close to the
+        // page margin, forcing a dock here would just clamp back to
+        // baseLeft while still measuring the gap as if it fit, letting the
+        // caption bubble spill into the target underneath it. Better to
+        // fall through to the classic left-edge travel than fake a dock
+        // that can't actually keep clear.
+        const hasRoomToDock = !!dockRect && dockRect.left - baseLeft >= wrapperWidth + DOCK_GAP_PX;
+        if (dockRect && hasRoomToDock) {
+          docked = true;
+          targetTop = dockRect.top + dockRect.height * 0.1;
+          targetLeft = dockRect.left - DOCK_GAP_PX - wrapperWidth;
+        } else {
+          // Travel range kept clear of the fixed navbar (84px tall) at the
+          // top, and nudged up slightly at the low end so the astronaut
+          // doesn't sit on top of the hero's "Fullstack Developer Portfolio"
+          // pill.
+          targetTop = window.innerHeight * (0.12 + progress * (0.78 - 0.12));
+          targetLeft = baseLeft;
+        }
       }
 
-      // Never let the companion drift off-screen — guards against the
-      // AI-docking target briefly being far above/below the viewport during
-      // a sudden scroll jump (e.g. a nav-link click) before the section
-      // observer has caught up.
+      // Never let the companion drift off-screen — guards against a dock
+      // target briefly being far above/below the viewport during a sudden
+      // scroll jump (e.g. a nav-link click) before the section observer has
+      // caught up.
       targetTop = Math.min(Math.max(targetTop, window.innerHeight * 0.05), window.innerHeight * 0.92);
 
       // Dock/undock a little snappier than the ordinary travel smoothing.
-      const smoothing = isFused ? 0.12 : 0.07;
+      const smoothing = docked ? 0.12 : 0.07;
       if (currentTopPxRef.current === null) {
         currentTopPxRef.current = targetTop;
       } else {
@@ -219,7 +253,7 @@ export const ScrollCompanion = () => {
       // "brain" straight into the widget.
       if (beamRef.current) {
         const card = isFused
-          ? document.querySelector<HTMLElement>("[data-ai-chat-card]")
+          ? document.querySelector<HTMLElement>('[data-companion-dock="ai"]')
           : null;
         const cardRect = card?.getBoundingClientRect();
         const wrapperRect = wrapperRef.current?.getBoundingClientRect();
@@ -399,6 +433,27 @@ export const ScrollCompanion = () => {
               />
             </button>
           </motion.div>
+
+          {/* "Thinking" beat: a brief signal-pulse glow near the top of his
+              helmet whenever he arrives/docks at a new section — reads as a
+              quick radio ping rather than a static state, and fades out on
+              its own well before the next section change. */}
+          <AnimatePresence>
+            {justEntered && !reducedMotion && (
+              <motion.div
+                key="signal-pulse"
+                aria-hidden
+                initial={{ opacity: 0, scale: 0.5 }}
+                animate={{ opacity: [0, 0.9, 0], scale: [0.6, 1.25, 1.6] }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: 0.9, ease: "easeOut" }}
+                className="pointer-events-none absolute left-1/2 top-[2%] -translate-x-1/2 w-[34%] h-[34%] rounded-full"
+                style={{
+                  background: "radial-gradient(circle, var(--accent-glow-strong) 0%, transparent 72%)",
+                }}
+              />
+            )}
+          </AnimatePresence>
 
           {/* Topic reaction: a plasma shield he "raises" while the
               security/encryption section is active — a themed reaction

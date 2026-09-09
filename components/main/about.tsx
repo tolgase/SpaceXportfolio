@@ -90,6 +90,7 @@ export const About = () => {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, amount: 0.4 }}
           transition={{ duration: 0.5, delay: 0.3 }}
+          data-companion-dock="about-me"
           className="grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 w-full mb-10 sm:mb-12"
         >
           {STATS.map((stat) => (

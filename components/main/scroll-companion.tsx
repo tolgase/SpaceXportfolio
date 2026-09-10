@@ -89,16 +89,18 @@ const DOCK_GAP_PX = 24;
 //    beat.
 // 3. Section docking — every section can offer a "dock point" (its main
 //    card/widget) via a `data-companion-dock="<section>"` attribute on that
-//    element. When one is present and on screen, the astronaut detaches
-//    from the left-edge column and settles beside it with a real measured
-//    gap (never touching it) instead of just hugging the left edge; a
-//    section with no dock point (or one that isn't visible yet) falls back
-//    to the classic left-edge travel. The AI section is a special case of
-//    this same mechanism: it additionally runs a single glowing connector
-//    from the astronaut to the chat widget, and his usual caption bubble
-//    steps aside for a compact "linked" badge so there's only ever one
-//    message card on screen. Scroll past a dock point and he undocks and
-//    resumes normal travel.
+//    element. When one is present, on screen, and there's genuine room for
+//    him (character + caption) to fit beside it without spilling into it,
+//    the astronaut detaches from the left-edge column, settles in with a
+//    real measured gap (never touching it), and a single glowing connector
+//    beam runs from him to the target — the same "linked in" read every
+//    docked section gets now, not just the AI one. A section with no dock
+//    point (or one that's off-screen, or too tight to fit him) falls back
+//    to the classic left-edge travel with no beam. The AI section additionally
+//    swaps his usual caption bubble for a compact "linked" badge, since the
+//    chat widget already presents its own message content and having both
+//    on screen at once would be redundant. Scroll past a dock point and he
+//    undocks and resumes normal travel.
 // 4. Topic reactions — a plasma shield fades in near his hand while the
 //    security/encryption section is active, and a brief signal-pulse glow
 //    flashes near the top of his helmet whenever he arrives/docks at a new
@@ -162,8 +164,17 @@ export const ScrollCompanion = () => {
     const tick = () => {
       const max = document.documentElement.scrollHeight - window.innerHeight;
       const progress = max > 0 ? clamp01(window.scrollY / max) : 0;
-      const isFused = activeSectionRef.current === "ai" && !reducedMotion;
       const baseLeft = window.innerWidth >= 768 ? 24 : 12;
+
+      // Every section can offer a dock point (its main card/widget) via a
+      // `data-companion-dock="<section>"` attribute, wherever that element
+      // actually sits on the page — computed once up front so both the
+      // position logic below and the connector beam (drawn for whichever
+      // section is actually docked, not just the AI one) can share it.
+      const dockEl = reducedMotion
+        ? null
+        : document.querySelector<HTMLElement>(`[data-companion-dock="${activeSectionRef.current}"]`);
+      const dockRect = dockEl?.getBoundingClientRect();
 
       let targetTop: number;
       let targetLeft: number;
@@ -173,16 +184,6 @@ export const ScrollCompanion = () => {
         targetTop = window.innerHeight * 0.4;
         targetLeft = baseLeft;
       } else {
-        // Every section can offer a dock point (its main card/widget) via a
-        // `data-companion-dock="<section>"` attribute, wherever that element
-        // actually sits on the page — so the astronaut settles beside real
-        // content instead of always hugging the left edge. Sections without
-        // one (or whose target isn't rendered/visible yet) fall through to
-        // the classic left-edge travel.
-        const dockEl = document.querySelector<HTMLElement>(
-          `[data-companion-dock="${activeSectionRef.current}"]`
-        );
-        const dockRect = dockEl?.getBoundingClientRect();
         // Measured against the whole group's current rendered width
         // (character + gap + caption bubble) so the caption itself never
         // creeps back in under the dock target — a gap sized only for the
@@ -248,21 +249,20 @@ export const ScrollCompanion = () => {
         gaugeTextRef.current.textContent = `${oxygenPct}%`;
       }
 
-      // The connector beam while fused with the AI chat card — a glowing
-      // line from the astronaut out to the card, like a wire from his
-      // "brain" straight into the widget.
+      // The connector beam whenever he's actually docked beside a section's
+      // card/widget — a glowing line from the astronaut out to it, like a
+      // wire from his "brain" straight into whatever he's linked to. Runs
+      // for every section now, not just the AI one — the same "linked in"
+      // read the AI chat card originally got.
       if (beamRef.current) {
-        const card = isFused
-          ? document.querySelector<HTMLElement>('[data-companion-dock="ai"]')
-          : null;
-        const cardRect = card?.getBoundingClientRect();
+        const cardRect = docked ? dockRect : null;
         const wrapperRect = wrapperRef.current?.getBoundingClientRect();
         // Guard against a stray beam stretching across the whole page during
         // a big, sudden scroll jump (e.g. clicking a nav link) — only draw
-        // it once the chat card is actually near the viewport.
+        // it once the dock target is actually near the viewport.
         const cardIsNearby =
           !!cardRect && cardRect.top > -window.innerHeight * 1.5 && cardRect.top < window.innerHeight * 2.5;
-        if (isFused && cardRect && wrapperRect && cardIsNearby) {
+        if (docked && cardRect && wrapperRect && cardIsNearby) {
           const x1 = wrapperRect.left + wrapperRect.width * 0.32;
           const y1 = wrapperRect.top + wrapperRect.height * 0.22;
           const x2 = cardRect.left + 14;

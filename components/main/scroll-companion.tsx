@@ -370,9 +370,11 @@ export const ScrollCompanion = () => {
   // Fluid sizing (clamp between a mobile-safe floor and a desktop ceiling)
   // so the companion scales continuously with viewport width instead of
   // jumping between two fixed breakpoints — the same character reads right
-  // from a small tablet up through an ultra-wide monitor.
-  const charSize = "clamp(5.5rem, 8vw, 9rem)";
-  const gaugeSize = "clamp(1.7rem, 2.1vw, 2.25rem)";
+  // from a phone up through an ultra-wide monitor. The floor is a real
+  // vw-based value (not a flat rem) so he keeps shrinking on narrow phones
+  // instead of pinning at the tablet-sized minimum.
+  const charSize = "clamp(3.75rem, 16vw, 9rem)";
+  const gaugeSize = "clamp(1.35rem, 4.5vw, 2.25rem)";
 
   return (
     <>
@@ -383,7 +385,7 @@ export const ScrollCompanion = () => {
       <div
         ref={beamRef}
         aria-hidden
-        className="companion-beam hidden sm:block fixed z-30 h-[2px] origin-left rounded-full pointer-events-none transition-opacity duration-500"
+        className="companion-beam block fixed z-30 h-[2px] origin-left rounded-full pointer-events-none transition-opacity duration-500"
         style={{
           opacity: 0,
           backgroundImage:
@@ -395,7 +397,7 @@ export const ScrollCompanion = () => {
       <div
         ref={wrapperRef}
         style={{ top: "14%", left: "12px" }}
-        className="hidden sm:flex fixed z-40 items-center gap-6 md:gap-7"
+        className="flex fixed z-40 items-center gap-3 sm:gap-6 md:gap-7"
       >
         <div className="relative shrink-0" style={{ width: charSize, height: charSize }}>
           <motion.div
@@ -563,7 +565,7 @@ export const ScrollCompanion = () => {
               animate={{ opacity: 1, x: 0 }}
               exit={{ opacity: 0, x: -8 }}
               transition={{ duration: 0.3 }}
-              className="liquid-glass max-w-[200px] rounded-2xl px-4 py-2.5 text-sm md:text-[15px] font-medium leading-snug text-gray-100 shadow-lg"
+              className="liquid-glass max-w-[130px] sm:max-w-[200px] rounded-2xl px-3 py-2 sm:px-4 sm:py-2.5 text-xs sm:text-sm md:text-[15px] font-medium leading-snug text-gray-100 shadow-lg"
             >
               {captionText}
             </motion.div>

@@ -1,10 +1,10 @@
 import { NextResponse } from "next/server";
 
-// Runs server-side only — the Mistral API key never reaches the browser.
+// Runs server-side only — the Groq API key never reaches the browser.
 export const runtime = "nodejs";
 
-const MISTRAL_API_URL = "https://api.mistral.ai/v1/chat/completions";
-const MODEL = "mistral-small-latest";
+const GROQ_API_URL = "https://api.groq.com/openai/v1/chat/completions";
+const MODEL = "openai/gpt-oss-120b";
 
 // Hard caps so a single request can't run up an unbounded bill or send an
 // oversized payload — independent of the client-side "3 free messages" cap,
@@ -75,7 +75,7 @@ function isChatMessage(value: unknown): value is ChatMessage {
 }
 
 export async function POST(request: Request) {
-  const apiKey = process.env.MISTRAL_API_KEY;
+  const apiKey = process.env.GROQ_API_KEY;
   if (!apiKey) {
     return NextResponse.json(
       { error: "The AI assistant isn't configured yet." },
@@ -108,7 +108,7 @@ export async function POST(request: Request) {
   }
 
   try {
-    const response = await fetch(MISTRAL_API_URL, {
+    const response = await fetch(GROQ_API_URL, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -124,7 +124,7 @@ export async function POST(request: Request) {
 
     if (!response.ok) {
       const errText = await response.text();
-      console.error("Mistral API error", response.status, errText);
+      console.error("Groq API error", response.status, errText);
       return NextResponse.json(
         { error: "The AI assistant is temporarily unavailable." },
         { status: 502 }
@@ -145,7 +145,7 @@ export async function POST(request: Request) {
 
     return NextResponse.json({ reply });
   } catch (error) {
-    console.error("Mistral API request failed", error);
+    console.error("Groq API request failed", error);
     return NextResponse.json(
       { error: "The AI assistant is temporarily unavailable." },
       { status: 502 }

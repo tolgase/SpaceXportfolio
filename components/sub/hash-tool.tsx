@@ -98,10 +98,15 @@ export const HashTool = () => {
         <button
           type="button"
           onClick={handleCopy}
+          aria-label="Copy hash to clipboard"
           className="relative z-[5] text-left text-xs text-gray-400 break-all rounded-lg border border-[var(--accent-border)] bg-white/5 px-3 py-2 hover:text-gray-200 transition"
         >
           {hash}
-          <span className="block mt-1 text-[10px] text-[var(--accent-solid)]">
+          <span
+            role="status"
+            aria-live="polite"
+            className="block mt-1 text-[10px] text-[var(--accent-solid)]"
+          >
             {copied ? "Copied!" : "Click to copy"}
           </span>
         </button>

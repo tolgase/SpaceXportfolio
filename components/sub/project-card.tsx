@@ -38,6 +38,7 @@ export const ProjectCard = ({
           alt={title}
           width={1000}
           height={1000}
+          sizes="(min-width: 1280px) 300px, (min-width: 640px) 50vw, 100vw"
           className="w-full object-contain transition-transform duration-300 group-hover:scale-[1.03]"
         />
 

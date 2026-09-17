@@ -112,7 +112,7 @@ export const SOCIALS = [
   {
     name: "Twitter",
     icon: RxTwitterLogo,
-    link: "https://twitter.com",
+    link: "https://x.com/Aaronbayou1140",
   },
 ] as const;
 

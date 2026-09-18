@@ -43,9 +43,9 @@ export const ProjectCard = ({
         />
 
         <div className="relative p-5 sm:p-8 flex flex-col flex-1">
-          <h1 className="text-lg sm:text-xl lg:text-2xl font-semibold text-white">
+          <h3 className="text-lg sm:text-xl lg:text-2xl font-semibold text-white">
             {title}
-          </h1>
+          </h3>
           <p className="mt-2 text-sm sm:text-base text-gray-300 line-clamp-6">
             {description}
           </p>

@@ -25,7 +25,7 @@ export const Projects = () => {
       className="flex flex-col items-center justify-center py-12 sm:py-16 lg:py-20 px-4"
     >
       <motion.div style={{ y: headingY }}>
-        <motion.h1
+        <motion.h2
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, amount: 0.6 }}
@@ -33,7 +33,7 @@ export const Projects = () => {
           className="text-2xl sm:text-3xl lg:text-[40px] font-semibold text-transparent bg-clip-text bg-gradient-to-r from-[var(--accent-from)] to-[var(--accent-to)] py-8 sm:py-12 lg:py-20 text-center"
         >
           My latest Roles
-        </motion.h1>
+        </motion.h2>
       </motion.div>
 
       <motion.div

@@ -24,9 +24,9 @@ export const HeroContent = () => {
           className="Welcome-box py-[8px] px-[7px] border border-[var(--accent-border)] opacity-90"
         >
           <SparklesIcon className="text-[#b49bff] mr-[10px] h-5 w-5 shrink-0" />
-          <h1 className="Welcome-text text-[13px]">
+          <h2 className="Welcome-text text-[13px]">
             Fullstack Developer Portfolio
-          </h1>
+          </h2>
         </motion.div>
 
         <motion.div

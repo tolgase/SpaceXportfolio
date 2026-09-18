@@ -105,7 +105,7 @@ export const Encryption = () => {
             </div>
 
             <div className="Welcome-box liquid-glass px-[15px] py-[4px] z-[20] border my-[14px] sm:my-[20px] border-[var(--accent-border)] opacity-90">
-              <h1 className="Welcome-text text-[12px] relative z-[1]">Encryption</h1>
+              <h2 className="Welcome-text text-[12px] relative z-[1]">Encryption</h2>
             </div>
           </motion.div>
 

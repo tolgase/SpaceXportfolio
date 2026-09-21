@@ -103,7 +103,7 @@ export const Skills = () => {
         >
           <video
             className="w-full h-auto"
-            preload="false"
+            preload="none"
             playsInline
             loop
             muted

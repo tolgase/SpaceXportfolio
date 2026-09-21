@@ -47,7 +47,7 @@ export const Encryption = () => {
           muted
           autoPlay
           playsInline
-          preload="false"
+          preload="none"
           className="w-full h-full object-cover"
           style={{ filter: "url(#glassRefraction)" }}
         >

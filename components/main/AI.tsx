@@ -82,7 +82,7 @@ export const AI = () => {
         style={{ y: bgY }}
         className="absolute inset-0 -z-20 flex items-start justify-center opacity-25"
       >
-        <video loop muted autoPlay playsInline preload="false" className="w-full h-auto">
+        <video loop muted autoPlay playsInline preload="none" className="w-full h-auto">
           <source src="/videos/Ai.webm" type="video/webm" />
         </video>
       </motion.div>

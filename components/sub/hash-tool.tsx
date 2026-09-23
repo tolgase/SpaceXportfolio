@@ -76,7 +76,7 @@ export const HashTool = () => {
           value={algorithm}
           onChange={(event) => setAlgorithm(event.target.value as Algorithm)}
           aria-label="Hash algorithm"
-          className="rounded-full border border-[var(--accent-border)] bg-[#0300147a] px-3 py-2 text-xs text-gray-200 outline-none cursor-pointer"
+          className="rounded-full border border-[var(--accent-border)] bg-[#0300147a] px-3 py-2 text-xs text-gray-200 outline-none cursor-pointer focus:border-[var(--accent-solid)] focus-visible:ring-2 focus-visible:ring-[var(--accent-solid)]/50 transition"
         >
           {ALGORITHMS.map((algo) => (
             <option key={algo} value={algo}>

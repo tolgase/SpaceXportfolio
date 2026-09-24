@@ -32,7 +32,7 @@ export default function ExperienceDetailPage({ params }: PageProps) {
   }
 
   return (
-    <main className="w-full pt-[130px] sm:pt-[150px] pb-24 px-4 min-h-screen">
+    <main id="main-content" className="w-full pt-[130px] sm:pt-[150px] pb-24 px-4 min-h-screen">
       <div className="max-w-2xl mx-auto flex flex-col gap-8">
         <div className="flex flex-wrap items-center gap-3">
           <Link

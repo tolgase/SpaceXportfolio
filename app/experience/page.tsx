@@ -18,7 +18,7 @@ export const metadata: Metadata = {
 
 export default function ExperiencePage() {
   return (
-    <main className="w-full pt-[110px] sm:pt-[130px] pb-20 px-4">
+    <main id="main-content" className="w-full pt-[110px] sm:pt-[130px] pb-20 px-4">
       <div className="max-w-5xl mx-auto flex flex-col gap-16 sm:gap-20">
         {/* Header */}
         <div className="flex flex-col items-center text-center gap-4">

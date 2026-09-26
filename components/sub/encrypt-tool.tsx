@@ -2,6 +2,8 @@
 
 import { useState } from "react";
 
+import { useCopyToClipboard } from "@/lib/use-copy-to-clipboard";
+
 const PBKDF2_ITERATIONS = 100_000;
 
 function toBase64(bytes: Uint8Array) {
@@ -76,13 +78,13 @@ export const EncryptTool = () => {
   const [output, setOutput] = useState("");
   const [error, setError] = useState("");
   const [busy, setBusy] = useState(false);
-  const [copied, setCopied] = useState(false);
+  const { copied, copy, reset } = useCopyToClipboard();
 
   const handleRun = async () => {
     if (!input.trim() || !passphrase) return;
     setBusy(true);
     setError("");
-    setCopied(false);
+    reset();
     try {
       const result =
         mode === "encrypt"
@@ -101,16 +103,7 @@ export const EncryptTool = () => {
     }
   };
 
-  const handleCopy = async () => {
-    if (!output) return;
-    try {
-      await navigator.clipboard.writeText(output);
-      setCopied(true);
-      setTimeout(() => setCopied(false), 1500);
-    } catch {
-      // Ignore — output is still selectable/visible.
-    }
-  };
+  const handleCopy = () => copy(output);
 
   return (
     <div className="liquid-glass w-full flex flex-col gap-3 rounded-2xl p-5 sm:p-6">

@@ -2,6 +2,8 @@
 
 import { useState } from "react";
 
+import { useCopyToClipboard } from "@/lib/use-copy-to-clipboard";
+
 const ALGORITHMS = ["SHA-256", "SHA-384", "SHA-512"] as const;
 type Algorithm = (typeof ALGORITHMS)[number];
 
@@ -21,8 +23,8 @@ export const HashTool = () => {
   const [input, setInput] = useState("");
   const [algorithm, setAlgorithm] = useState<Algorithm>("SHA-256");
   const [hash, setHash] = useState("");
-  const [copied, setCopied] = useState(false);
   const [busy, setBusy] = useState(false);
+  const { copied, copy, reset } = useCopyToClipboard();
 
   const handleHash = async () => {
     if (!input.trim()) {
@@ -33,23 +35,13 @@ export const HashTool = () => {
     try {
       const result = await hashText(input, algorithm);
       setHash(result);
-      setCopied(false);
+      reset();
     } finally {
       setBusy(false);
     }
   };
 
-  const handleCopy = async () => {
-    if (!hash) return;
-    try {
-      await navigator.clipboard.writeText(hash);
-      setCopied(true);
-      setTimeout(() => setCopied(false), 1500);
-    } catch {
-      // Clipboard API unavailable — silently ignore, the hash is still
-      // visible to select/copy manually.
-    }
-  };
+  const handleCopy = () => copy(hash);
 
   return (
     <div className="liquid-glass w-full flex flex-col gap-3 rounded-2xl p-5 sm:p-6">

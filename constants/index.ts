@@ -602,5 +602,5 @@ export const NAV_LINKS = [
 ] as const;
 
 export const LINKS = {
-  sourceCode: "https://github.com/tolgase",
+  sourceCode: "https://github.com/tolgase/SpaceXportfolio",
 };

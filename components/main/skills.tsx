@@ -14,6 +14,15 @@ import {
   SKILL_DATA,
 } from "@/constants";
 
+// Each group renders in its own row, in display order.
+const SKILL_GROUPS = [
+  SKILL_DATA,
+  FRONTEND_SKILL,
+  BACKEND_SKILL,
+  FULLSTACK_SKILL,
+  OTHER_SKILL,
+];
+
 export const Skills = () => {
   const sectionRef = useRef<HTMLElement>(null);
   const { scrollYProgress } = useScroll({
@@ -34,67 +43,23 @@ export const Skills = () => {
         <SkillText />
       </div>
 
-      <div className="flex flex-row justify-center flex-wrap mt-4 gap-4 sm:gap-5 items-center max-w-4xl">
-        {SKILL_DATA.map((skill, i) => (
-          <SkillDataProvider
-            key={skill.skill_name}
-            src={skill.image}
-            name={skill.skill_name}
-            width={skill.width}
-            height={skill.height}
-            index={i}
-          />
-        ))}
-      </div>
-
-      <div className="flex flex-row justify-center flex-wrap mt-4 gap-4 sm:gap-5 items-center max-w-4xl">
-        {FRONTEND_SKILL.map((skill, i) => (
-          <SkillDataProvider
-            key={skill.skill_name}
-            src={skill.image}
-            name={skill.skill_name}
-            width={skill.width}
-            height={skill.height}
-            index={i}
-          />
-        ))}
-      </div>
-      <div className="flex flex-row justify-center flex-wrap mt-4 gap-4 sm:gap-5 items-center max-w-4xl">
-        {BACKEND_SKILL.map((skill, i) => (
-          <SkillDataProvider
-            key={skill.skill_name}
-            src={skill.image}
-            name={skill.skill_name}
-            width={skill.width}
-            height={skill.height}
-            index={i}
-          />
-        ))}
-      </div>
-      <div className="flex flex-row justify-center flex-wrap mt-4 gap-4 sm:gap-5 items-center max-w-4xl">
-        {FULLSTACK_SKILL.map((skill, i) => (
-          <SkillDataProvider
-            key={skill.skill_name}
-            src={skill.image}
-            name={skill.skill_name}
-            width={skill.width}
-            height={skill.height}
-            index={i}
-          />
-        ))}
-      </div>
-      <div className="flex flex-row justify-center flex-wrap mt-4 gap-4 sm:gap-5 items-center max-w-4xl">
-        {OTHER_SKILL.map((skill, i) => (
-          <SkillDataProvider
-            key={skill.skill_name}
-            src={skill.image}
-            name={skill.skill_name}
-            width={skill.width}
-            height={skill.height}
-            index={i}
-          />
-        ))}
-      </div>
+      {SKILL_GROUPS.map((group, groupIndex) => (
+        <div
+          key={groupIndex}
+          className="flex flex-row justify-center flex-wrap mt-4 gap-4 sm:gap-5 items-center max-w-4xl"
+        >
+          {group.map((skill, i) => (
+            <SkillDataProvider
+              key={skill.skill_name}
+              src={skill.image}
+              name={skill.skill_name}
+              width={skill.width}
+              height={skill.height}
+              index={i}
+            />
+          ))}
+        </div>
+      ))}
 
       <div className="w-full h-full absolute">
         <motion.div

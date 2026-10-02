@@ -1,4 +1,4 @@
-import { FaYoutube, FaFacebook } from "react-icons/fa";
+import { FaYoutube } from "react-icons/fa";
 import {
   RxDiscordLogo,
   RxGithubLogo,
@@ -103,11 +103,6 @@ export const SOCIALS = [
     name: "Instagram",
     icon: RxInstagramLogo,
     link: "https://www.instagram.com/starckaxel/",
-  },
-  {
-    name: "Facebook",
-    icon: FaFacebook,
-    link: "https://facebook.com",
   },
   {
     name: "Twitter",

@@ -73,6 +73,7 @@ export const Skills = () => {
             loop
             muted
             autoPlay
+            aria-hidden="true"
           >
             <source src="/videos/skills-bg.webm" type="video/webm" />
           </video>

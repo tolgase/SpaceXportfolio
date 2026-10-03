@@ -36,6 +36,7 @@ export const Hero = () => {
             muted
             loop
             playsInline
+            aria-hidden="true"
             className="-scale-x-100 absolute top-[-40px] sm:top-[-60px] lg:top-[-80px] left-0 w-full h-full object-cover -z-20"
           >
             <source src="/videos/sun.webm" type="video/webm" />
@@ -47,6 +48,7 @@ export const Hero = () => {
             muted
             loop
             playsInline
+            aria-hidden="true"
             className="rotate-180 absolute top-[-180px] sm:top-[-260px] lg:top-[-340px] left-0 w-full h-full object-cover -z-20"
           >
             <source src="/videos/blackhole.webm" type="video/webm" />

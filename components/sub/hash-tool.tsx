@@ -57,7 +57,12 @@ export const HashTool = () => {
         <input
           type="text"
           value={input}
-          onChange={(event) => setInput(event.target.value)}
+          onChange={(event) => {
+            setInput(event.target.value);
+            // The previously computed hash no longer matches the text now
+            // in the box, so don't leave it on screen looking current.
+            if (hash) setHash("");
+          }}
           onKeyDown={(event) => {
             if (event.key === "Enter") handleHash();
           }}
@@ -66,7 +71,10 @@ export const HashTool = () => {
         />
         <select
           value={algorithm}
-          onChange={(event) => setAlgorithm(event.target.value as Algorithm)}
+          onChange={(event) => {
+            setAlgorithm(event.target.value as Algorithm);
+            if (hash) setHash("");
+          }}
           aria-label="Hash algorithm"
           className="rounded-full border border-[var(--accent-border)] bg-[#0300147a] px-3 py-2 text-xs text-gray-200 outline-none cursor-pointer focus:border-[var(--accent-solid)] focus-visible:ring-2 focus-visible:ring-[var(--accent-solid)]/50 transition"
         >

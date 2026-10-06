@@ -89,7 +89,11 @@ export const AI = () => {
       <div className="absolute inset-0 -z-10 bg-gradient-to-b from-[#030014]/30 via-[#030014]/80 to-[#030014]" />
 
       <div ref={headingRef}>
-        <motion.div
+        {/* Every other main section (About, Skills, Encryption, Projects)
+            has a real heading element identifying it in the page outline.
+            This one didn't — screen-reader users jumping section-to-section
+            by heading landed with no label here. */}
+        <motion.h2
           style={{ opacity: headingOpacity, y: headingYAnim }}
           className="text-2xl sm:text-3xl lg:text-[40px] font-medium text-center text-gray-200"
         >
@@ -98,7 +102,7 @@ export const AI = () => {
             &
           </span>{" "}
           Intelligence.
-        </motion.div>
+        </motion.h2>
       </div>
 
       <div className="cursive text-base sm:text-lg lg:text-[22px] text-gray-300 text-center mt-2">

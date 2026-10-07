@@ -1,5 +1,10 @@
 import type { Metadata } from "next";
 
+// Canonical deployed URL — used for metadata (sitemap.xml, robots.txt, and
+// any absolute links Next.js needs to generate) rather than hardcoding the
+// domain in multiple files.
+export const SITE_URL = "https://spaceportfolio.netlify.app";
+
 export const siteConfig: Metadata = {
   title: "Haroun Bayoudh | Senior Full Stack Developer (PHP, React, AI)",
   description:

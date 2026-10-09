@@ -4,13 +4,24 @@ import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/solid";
 import { AnimatePresence, motion } from "framer-motion";
 import Image from "next/image";
 import Link from "next/link";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import { ThemeToggle } from "@/components/main/theme-toggle";
 import { LINKS, NAV_LINKS, SOCIALS } from "@/constants";
 
 export const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
+
+  // Keyboard users expect Escape to dismiss an open disclosure menu like
+  // this one — only listen while it's actually open.
+  useEffect(() => {
+    if (!isOpen) return;
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") setIsOpen(false);
+    };
+    document.addEventListener("keydown", handleKeyDown);
+    return () => document.removeEventListener("keydown", handleKeyDown);
+  }, [isOpen]);
 
   return (
     <div className="w-full h-[84px] fixed top-0 shadow-lg shadow-[var(--accent-shadow)] bg-[var(--navbar-bg)] backdrop-blur-md z-50 px-4 sm:px-6 lg:px-10">

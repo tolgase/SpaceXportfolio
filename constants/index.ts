@@ -6,8 +6,22 @@ import {
   RxTwitterLogo,
   RxLinkedinLogo,
 } from "react-icons/rx";
+import { SiMagento, SiPhp, SiStorybook, SiWordpress } from "react-icons/si";
+import type { IconType } from "react-icons";
 
-export const SKILL_DATA = [
+// Each entry renders either a static logo (`image`, resolved against
+// /public/skills) or, for brands we don't have a matching PNG for yet,
+// a scalable icon component (`icon`) from the already-installed
+// react-icons/si set — used instead of mismatched stand-in images.
+type SkillDatum = {
+  skill_name: string;
+  image?: string;
+  icon?: IconType;
+  width: number;
+  height: number;
+};
+
+export const SKILL_DATA: SkillDatum[] = [
   {
     skill_name: "HTML",
     image: "html.png",
@@ -64,7 +78,7 @@ export const SKILL_DATA = [
   },
   {
     skill_name: "WordPress",
-    image: "framer.png",
+    icon: SiWordpress,
     width: 80,
     height: 80,
   },
@@ -86,7 +100,7 @@ export const SKILL_DATA = [
     width: 40,
     height: 40,
   },
-] as const;
+];
 
 export const SOCIALS = [
   {
@@ -115,7 +129,7 @@ export const WHATSAPP_NUMBER = "21651873655";
 
 export const CV_FILE_PATH = "/cv/Haroun-Bayoudh-CV.pdf";
 
-export const FRONTEND_SKILL = [
+export const FRONTEND_SKILL: SkillDatum[] = [
   {
     skill_name: "HTML",
     image: "html.png",
@@ -142,7 +156,7 @@ export const FRONTEND_SKILL = [
   },
   {
     skill_name: "PHP",
-    image: "mui.png",
+    icon: SiPhp,
     width: 80,
     height: 80,
   },
@@ -176,9 +190,9 @@ export const FRONTEND_SKILL = [
     width: 80,
     height: 80,
   },
-] as const;
+];
 
-export const BACKEND_SKILL = [
+export const BACKEND_SKILL: SkillDatum[] = [
   {
     skill_name: "Node.js",
     image: "node.png",
@@ -217,7 +231,7 @@ export const BACKEND_SKILL = [
   },
   {
     skill_name: "Magento",
-    image: "prisma.png",
+    icon: SiMagento,
     width: 70,
     height: 70,
   },
@@ -227,12 +241,12 @@ export const BACKEND_SKILL = [
     width: 80,
     height: 80,
   },
-] as const;
+];
 
-export const FULLSTACK_SKILL = [
+export const FULLSTACK_SKILL: SkillDatum[] = [
   {
     skill_name: "Storybook",
-    image: "reactnative.png",
+    icon: SiStorybook,
     width: 70,
     height: 70,
   },
@@ -255,16 +269,16 @@ export const FULLSTACK_SKILL = [
     width: 50,
     height: 50,
   },
-] as const;
+];
 
-export const OTHER_SKILL = [
+export const OTHER_SKILL: SkillDatum[] = [
   {
     skill_name: "Go",
     image: "go.png",
     width: 60,
     height: 60,
   },
-] as const;
+];
 
 // Homepage highlights — a curated slice of the full work history below.
 // Internal links point into the /experience page's matching section;

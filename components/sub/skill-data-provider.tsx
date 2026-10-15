@@ -2,10 +2,14 @@
 
 import { motion } from "framer-motion";
 import Image from "next/image";
+import type { IconType } from "react-icons";
 import { useInView } from "react-intersection-observer";
 
 type SkillDataProviderProps = {
-  src: string;
+  // Either a static logo under /public/skills, or (for brands with no
+  // matching PNG) a react-icons/si component — see constants/index.ts.
+  src?: string;
+  icon?: IconType;
   name: string;
   width: number;
   height: number;
@@ -14,6 +18,7 @@ type SkillDataProviderProps = {
 
 export const SkillDataProvider = ({
   src,
+  icon: Icon,
   name,
   width,
   height,
@@ -39,7 +44,16 @@ export const SkillDataProvider = ({
       custom={index}
       transition={{ delay: index * animationDelay }}
     >
-      <Image src={`/skills/${src}`} width={width} height={height} alt={name} />
+      {Icon ? (
+        <Icon
+          role="img"
+          aria-label={name}
+          className="text-white"
+          style={{ width, height }}
+        />
+      ) : src ? (
+        <Image src={`/skills/${src}`} width={width} height={height} alt={name} />
+      ) : null}
     </motion.div>
   );
 };

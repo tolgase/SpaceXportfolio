@@ -13,18 +13,29 @@ export const Footer = () => {
               className="min-w-[160px] h-auto flex flex-col items-center justify-start"
             >
               <h3 className="font-bold text-[16px]">{column.title}</h3>
-              {column.data.map(({ icon: Icon, name, link }) => (
-                <Link
-                  key={`${column.title}-${name}`}
-                  href={link}
-                  target="_blank"
-                  rel="noreferrer noopener"
-                  className="flex flex-row items-center my-[15px] cursor-pointer hover:text-[var(--accent-solid)] transition"
-                >
-                  {Icon && <Icon />}
-                  <span className="text-[15px] ml-[6px]">{name}</span>
-                </Link>
-              ))}
+              {column.data.map(({ icon: Icon, name, link }) => {
+                // Only genuinely external links should open in a new tab.
+                // In-page anchors (e.g. "/#about-me") and "mailto:" links
+                // need to stay in the current tab, otherwise anchors can't
+                // scroll the page that opened them and mail links leave
+                // behind a blank tab alongside the mail client.
+                const isExternal = /^https?:\/\//.test(link);
+
+                return (
+                  <Link
+                    key={`${column.title}-${name}`}
+                    href={link}
+                    {...(isExternal && {
+                      target: "_blank",
+                      rel: "noreferrer noopener",
+                    })}
+                    className="flex flex-row items-center my-[15px] cursor-pointer hover:text-[var(--accent-solid)] transition"
+                  >
+                    {Icon && <Icon />}
+                    <span className="text-[15px] ml-[6px]">{name}</span>
+                  </Link>
+                );
+              })}
             </div>
           ))}
         </div>

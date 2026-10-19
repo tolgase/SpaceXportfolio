@@ -112,7 +112,7 @@ export const AI = () => {
       <div className="flex flex-col items-center group cursor-pointer w-auto h-auto mt-6">
         <Image
           src="/ai.png"
-          alt="ai main"
+          alt=""
           width={100}
           height={100}
           className="w-[74px] h-[74px] sm:w-[90px] sm:h-[90px] transition-transform duration-300 group-hover:scale-110"

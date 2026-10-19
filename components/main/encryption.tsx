@@ -91,14 +91,14 @@ export const Encryption = () => {
             <div className="flex flex-col items-center group cursor-pointer w-auto h-auto">
               <Image
                 src="/lock-top.png"
-                alt="Lock top"
+                alt=""
                 width={50}
                 height={50}
                 className="translate-y-5 transition-all duration-200 group-hover:translate-y-11 w-[38px] h-[38px] sm:w-[50px] sm:h-[50px]"
               />
               <Image
                 src="/lock-main.png"
-                alt="Lock main"
+                alt=""
                 width={70}
                 height={70}
                 className="z-10 w-[54px] h-[54px] sm:w-[70px] sm:h-[70px]"

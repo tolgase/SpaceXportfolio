@@ -87,7 +87,7 @@ export const HeroContent = () => {
       >
         <Image
           src="/hero-bg.svg"
-          alt="work icons"
+          alt=""
           height={650}
           width={650}
           draggable={false}

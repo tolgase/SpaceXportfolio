@@ -236,6 +236,14 @@ html {
   scroll-behavior: smooth;
 }
 
+/* The navbar is fixed at 84px tall (see navbar.tsx), so without this,
+ * jumping to a section via nav/footer anchor links or the hero's
+ * "Learn more" button lands its heading right under the navbar instead
+ * of just below it. */
+main section[id] {
+  scroll-margin-top: 84px;
+}
+
 @media (prefers-reduced-motion: reduce) {
   html {
     scroll-behavior: auto;

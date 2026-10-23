@@ -19,6 +19,12 @@ export const ProjectCard = ({
   link,
   index = 0,
 }: ProjectCardProps) => {
+  // Most project cards link to an internal /experience/[slug] page, with
+  // only a couple pointing at a real external site. Only the latter should
+  // open in a new tab — otherwise an internal route navigation leaves a
+  // stray blank tab behind (same fix already applied to the footer links).
+  const isExternal = /^https?:\/\//.test(link);
+
   return (
     <motion.div
       initial={{ opacity: 0, y: 40 }}
@@ -29,8 +35,7 @@ export const ProjectCard = ({
     >
       <Link
         href={link}
-        target="_blank"
-        rel="noreferrer noopener"
+        {...(isExternal && { target: "_blank", rel: "noreferrer noopener" })}
         className="group relative flex flex-col overflow-hidden rounded-lg shadow-lg border border-[var(--accent-border-solid)] bg-[#0300147a] h-full cursor-pointer transition-transform duration-200 hover:-translate-y-1 focus-visible:outline focus-visible:outline-2 focus-visible:outline-[var(--accent-solid)]"
       >
         <Image

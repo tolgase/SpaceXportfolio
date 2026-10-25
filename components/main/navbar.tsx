@@ -28,18 +28,27 @@ export const Navbar = () => {
       <div className="w-full h-full flex flex-row items-center justify-between max-w-7xl m-auto">
         <Link
           href="/"
+          aria-label="Haroun Bayoudh — home"
           className="h-auto w-auto flex flex-row items-center shrink-0"
           onClick={() => setIsOpen(false)}
         >
+          {/* Decorative: the link's accessible name comes from aria-label
+              above, so screen readers aren't also read "Logo" (and, on
+              desktop, a second redundant "Haroun Bayoudh" from the text
+              below, which is hidden from the accessibility tree on mobile
+              since it's hidden from view there too). */}
           <Image
             src="/logo.png"
-            alt="Logo"
+            alt=""
             width={64}
             height={64}
             draggable={false}
             className="cursor-pointer hover:animate-slowspin w-[40px] h-[40px] sm:w-[52px] sm:h-[52px] lg:w-[64px] lg:h-[64px]"
           />
-          <div className="font-bold ml-[10px] hidden md:block text-gray-300">
+          <div
+            className="font-bold ml-[10px] hidden md:block text-gray-300"
+            aria-hidden="true"
+          >
             Haroun Bayoudh
           </div>
         </Link>

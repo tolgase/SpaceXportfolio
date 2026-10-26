@@ -1,6 +1,4 @@
-import { FaYoutube } from "react-icons/fa";
 import {
-  RxDiscordLogo,
   RxGithubLogo,
   RxInstagramLogo,
   RxTwitterLogo,
@@ -530,19 +528,9 @@ export const FOOTER_DATA = [
     title: "Community",
     data: [
       {
-        name: "YouTube",
-        icon: FaYoutube,
-        link: "https://youtube.com",
-      },
-      {
         name: "GitHub",
         icon: RxGithubLogo,
         link: "https://github.com/tolgase",
-      },
-      {
-        name: "Discord",
-        icon: RxDiscordLogo,
-        link: "https://discord.com",
       },
     ],
   },

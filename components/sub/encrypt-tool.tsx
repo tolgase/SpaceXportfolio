@@ -111,11 +111,16 @@ export const EncryptTool = () => {
         <h3 className="text-sm font-semibold text-gray-200">
           Live AES-256 encryption
         </h3>
-        <div className="flex rounded-full border border-[var(--accent-border)] p-0.5 text-[11px]">
+        <div
+          role="group"
+          aria-label="Encryption mode"
+          className="flex rounded-full border border-[var(--accent-border)] p-0.5 text-[11px]"
+        >
           {(["encrypt", "decrypt"] as const).map((option) => (
             <button
               key={option}
               type="button"
+              aria-pressed={mode === option}
               onClick={() => {
                 setMode(option);
                 setOutput("");

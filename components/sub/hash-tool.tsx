@@ -67,6 +67,7 @@ export const HashTool = () => {
             if (event.key === "Enter") handleHash();
           }}
           placeholder="Type or paste text to hash..."
+          aria-label="Text to hash"
           className="flex-1 min-w-0 rounded-full border border-[var(--accent-border)] bg-white/5 px-4 py-2 text-sm text-gray-100 placeholder:text-gray-500 outline-none focus:border-[var(--accent-solid)] transition"
         />
         <select

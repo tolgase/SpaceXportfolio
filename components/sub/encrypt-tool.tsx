@@ -148,6 +148,7 @@ export const EncryptTool = () => {
           value={passphrase}
           onChange={(event) => setPassphrase(event.target.value)}
           placeholder="Passphrase"
+          aria-label="Passphrase"
           className="rounded-full border border-[var(--accent-border)] bg-white/5 px-4 py-2 text-sm text-gray-100 placeholder:text-gray-500 outline-none focus:border-[var(--accent-solid)] transition"
         />
         <textarea
@@ -157,6 +158,9 @@ export const EncryptTool = () => {
             mode === "encrypt"
               ? "Type text to encrypt..."
               : "Paste encrypted text to decrypt..."
+          }
+          aria-label={
+            mode === "encrypt" ? "Text to encrypt" : "Encrypted text to decrypt"
           }
           rows={2}
           className="resize-none rounded-2xl border border-[var(--accent-border)] bg-white/5 px-4 py-2 text-sm text-gray-100 placeholder:text-gray-500 outline-none focus:border-[var(--accent-solid)] transition"

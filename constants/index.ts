@@ -563,7 +563,7 @@ export const FOOTER_DATA = [
         link: `https://wa.me/${WHATSAPP_NUMBER}`,
       },
       {
-        name: "Learning about me",
+        name: "Learn About Me",
         icon: null,
         link: "/#about-me",
       },

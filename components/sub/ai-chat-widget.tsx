@@ -37,7 +37,7 @@ const whatsappHref = WHATSAPP_NUMBER
   : undefined;
 
 // A real, backend-connected chat widget (calls /api/chat, which holds the
-// Mistral API key server-side). Limited to a handful of free messages per
+// Groq API key server-side). Limited to a handful of free messages per
 // browser session (tracked in sessionStorage — a soft cap for a portfolio
 // demo, not a hard security boundary), after which it points visitors to
 // contact Haroun directly instead of continuing the conversation.

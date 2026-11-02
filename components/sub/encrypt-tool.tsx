@@ -149,6 +149,9 @@ export const EncryptTool = () => {
           onChange={(event) => setPassphrase(event.target.value)}
           placeholder="Passphrase"
           aria-label="Passphrase"
+          // Not a login field, so don't let the browser offer to save or
+          // autofill a stored account password into it.
+          autoComplete="new-password"
           className="rounded-full border border-[var(--accent-border)] bg-white/5 px-4 py-2 text-sm text-gray-100 placeholder:text-gray-500 outline-none focus:border-[var(--accent-solid)] transition"
         />
         <textarea

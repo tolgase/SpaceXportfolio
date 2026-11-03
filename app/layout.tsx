@@ -11,6 +11,7 @@ import { StarsCanvas } from "@/components/main/star-background";
 import { WhatsAppButton } from "@/components/main/whatsapp-button";
 import { siteConfig } from "@/config";
 import { HeroThemeProvider } from "@/lib/hero-theme-context";
+import { MotionProvider } from "@/lib/motion-provider";
 import { cn } from "@/lib/utils";
 
 import "./globals.css";
@@ -38,16 +39,18 @@ export default function RootLayout({ children }: PropsWithChildren) {
         >
           Skip to main content
         </a>
-        <HeroThemeProvider>
-          <GlassRefractionFilters />
-          <StarsCanvas />
-          <ScrollProgress />
-          <Navbar />
-          {children}
-          <Footer />
-          <WhatsAppButton />
-          <ScrollCompanion />
-        </HeroThemeProvider>
+        <MotionProvider>
+          <HeroThemeProvider>
+            <GlassRefractionFilters />
+            <StarsCanvas />
+            <ScrollProgress />
+            <Navbar />
+            {children}
+            <Footer />
+            <WhatsAppButton />
+            <ScrollCompanion />
+          </HeroThemeProvider>
+        </MotionProvider>
       </body>
     </html>
   );

@@ -6,14 +6,22 @@ import * as random from "maath/random";
 import { useState, useRef, Suspense } from "react";
 import type { Points as PointsType } from "three";
 
+import { useReducedMotion } from "@/lib/use-reduced-motion";
+
 export const StarBackground = (props: PointsProps) => {
   const ref = useRef<PointsType | null>(null);
   const [sphere] = useState(() =>
     random.inSphere(new Float32Array(5000), { radius: 1.2 })
   );
+  // This rotation is a react-three-fiber render-loop effect, so neither the
+  // sitewide CSS prefers-reduced-motion rule (globals.css) nor the
+  // framer-motion MotionConfig provider (lib/motion-provider.tsx) can reach
+  // it — without this, the starfield kept spinning at full speed for
+  // visitors who have that OS setting on.
+  const reducedMotion = useReducedMotion();
 
   useFrame((_state, delta) => {
-    if (ref.current) {
+    if (ref.current && !reducedMotion) {
       ref.current.rotation.x -= delta / 10;
       ref.current.rotation.y -= delta / 15;
     }

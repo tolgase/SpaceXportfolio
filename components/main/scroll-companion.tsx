@@ -4,6 +4,7 @@ import { AnimatePresence, motion } from "framer-motion";
 import { useEffect, useRef, useState } from "react";
 
 import { useHeroTheme } from "@/lib/hero-theme-context";
+import { useReducedMotion } from "@/lib/use-reduced-motion";
 import { cn } from "@/lib/utils";
 
 type SectionKey = "hero" | "about-me" | "skills" | "ai" | "encryption" | "projects";
@@ -123,7 +124,7 @@ export const ScrollCompanion = () => {
   const [activeSection, setActiveSection] = useState<SectionKey>("hero");
   const [messageTier, setMessageTier] = useState(0);
   const [justEntered, setJustEntered] = useState(false);
-  const [reducedMotion, setReducedMotion] = useState(false);
+  const reducedMotion = useReducedMotion();
 
   const fused = activeSection === "ai" && !reducedMotion;
 
@@ -286,14 +287,6 @@ export const ScrollCompanion = () => {
     rafId = requestAnimationFrame(tick);
     return () => cancelAnimationFrame(rafId);
   }, [reducedMotion]);
-
-  useEffect(() => {
-    const mql = window.matchMedia("(prefers-reduced-motion: reduce)");
-    setReducedMotion(mql.matches);
-    const onChange = () => setReducedMotion(mql.matches);
-    mql.addEventListener("change", onChange);
-    return () => mql.removeEventListener("change", onChange);
-  }, []);
 
   useEffect(() => {
     const elements = SECTION_IDS.map((id) => document.getElementById(id)).filter(

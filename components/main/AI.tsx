@@ -2,7 +2,7 @@
 
 import { motion, useScroll, useTransform } from "framer-motion";
 import Image from "next/image";
-import { useRef } from "react";
+import { useEffect, useRef } from "react";
 import {
   SiAmazonaws,
   SiChatbot,
@@ -20,6 +20,7 @@ import {
 
 import { AiChatWidget } from "@/components/sub/ai-chat-widget";
 import { WHATSAPP_NUMBER } from "@/constants";
+import { useReducedMotion } from "@/lib/use-reduced-motion";
 
 const AI_TOOLS = [
   { icon: SiOpenai, label: "OpenAI" },
@@ -47,6 +48,23 @@ const AI_SKILLS = [
 export const AI = () => {
   const sectionRef = useRef<HTMLElement>(null);
   const headingRef = useRef<HTMLDivElement>(null);
+  const bgVideoRef = useRef<HTMLVideoElement>(null);
+  // Neither the sitewide CSS prefers-reduced-motion rule nor the
+  // framer-motion MotionConfig reaches a plain <video autoPlay loop> tag —
+  // this looping background kept animating at full speed for visitors who
+  // have that OS setting on, same gap already closed for the starfield and
+  // framer-motion elsewhere on the site.
+  const reducedMotion = useReducedMotion();
+
+  useEffect(() => {
+    const video = bgVideoRef.current;
+    if (!video) return;
+    if (reducedMotion) {
+      video.pause();
+    } else {
+      video.play().catch(() => {});
+    }
+  }, [reducedMotion]);
 
   const { scrollYProgress } = useScroll({
     target: sectionRef,
@@ -82,7 +100,16 @@ export const AI = () => {
         style={{ y: bgY }}
         className="absolute inset-0 -z-20 flex items-start justify-center opacity-25"
       >
-        <video loop muted autoPlay playsInline preload="none" aria-hidden="true" className="w-full h-auto">
+        <video
+          ref={bgVideoRef}
+          loop
+          muted
+          autoPlay
+          playsInline
+          preload="none"
+          aria-hidden="true"
+          className="w-full h-auto"
+        >
           <source src="/videos/Ai.webm" type="video/webm" />
         </video>
       </motion.div>

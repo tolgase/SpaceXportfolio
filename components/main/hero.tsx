@@ -1,15 +1,33 @@
 "use client";
 
 import { motion, useScroll, useTransform } from "framer-motion";
-import { useRef } from "react";
+import { useEffect, useRef } from "react";
 
 import { HeroContent } from "@/components/sub/hero-content";
 import { useHeroTheme } from "@/lib/hero-theme-context";
+import { useReducedMotion } from "@/lib/use-reduced-motion";
 
 export const Hero = () => {
   const { mode } = useHeroTheme();
   const isDay = mode === "day";
   const sectionRef = useRef<HTMLDivElement>(null);
+  const bgVideoRef = useRef<HTMLVideoElement>(null);
+  // Neither the sitewide CSS prefers-reduced-motion rule nor the
+  // framer-motion MotionConfig reaches a plain <video autoPlay loop> tag —
+  // this looping sun/blackhole background kept animating at full speed for
+  // visitors who have that OS setting on, same gap already closed for the
+  // starfield and framer-motion elsewhere on the site.
+  const reducedMotion = useReducedMotion();
+
+  useEffect(() => {
+    const video = bgVideoRef.current;
+    if (!video) return;
+    if (reducedMotion) {
+      video.pause();
+    } else {
+      video.play().catch(() => {});
+    }
+  }, [reducedMotion, mode]);
 
   const { scrollYProgress } = useScroll({
     target: sectionRef,
@@ -32,6 +50,7 @@ export const Hero = () => {
         {isDay ? (
           <video
             key="sun"
+            ref={bgVideoRef}
             autoPlay
             muted
             loop
@@ -44,6 +63,7 @@ export const Hero = () => {
         ) : (
           <video
             key="blackhole"
+            ref={bgVideoRef}
             autoPlay
             muted
             loop

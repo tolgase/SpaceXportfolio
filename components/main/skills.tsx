@@ -1,7 +1,7 @@
 "use client";
 
 import { motion, useScroll, useTransform } from "framer-motion";
-import { useRef } from "react";
+import { useEffect, useRef } from "react";
 
 import { SkillDataProvider } from "@/components/sub/skill-data-provider";
 import { SkillText } from "@/components/sub/skill-text";
@@ -13,6 +13,7 @@ import {
   OTHER_SKILL,
   SKILL_DATA,
 } from "@/constants";
+import { useReducedMotion } from "@/lib/use-reduced-motion";
 
 // Each group renders in its own row, in display order.
 const SKILL_GROUPS = [
@@ -25,6 +26,24 @@ const SKILL_GROUPS = [
 
 export const Skills = () => {
   const sectionRef = useRef<HTMLElement>(null);
+  const bgVideoRef = useRef<HTMLVideoElement>(null);
+  // Neither the sitewide CSS prefers-reduced-motion rule nor the
+  // framer-motion MotionConfig reaches a plain <video autoPlay loop> tag —
+  // this looping background kept animating at full speed for visitors who
+  // have that OS setting on, same gap already closed for the starfield and
+  // framer-motion elsewhere on the site.
+  const reducedMotion = useReducedMotion();
+
+  useEffect(() => {
+    const video = bgVideoRef.current;
+    if (!video) return;
+    if (reducedMotion) {
+      video.pause();
+    } else {
+      video.play().catch(() => {});
+    }
+  }, [reducedMotion]);
+
   const { scrollYProgress } = useScroll({
     target: sectionRef,
     offset: ["start end", "end start"],
@@ -68,6 +87,7 @@ export const Skills = () => {
           className="w-full h-full z-[-10] opacity-30 absolute flex items-center justify-center bg-cover"
         >
           <video
+            ref={bgVideoRef}
             className="w-full h-auto"
             preload="none"
             playsInline

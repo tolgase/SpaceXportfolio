@@ -151,7 +151,12 @@ export const AiChatWidget = () => {
         )}
 
         {error && (
-          <div className="self-start rounded-2xl px-3 py-2 text-sm bg-red-500/10 text-red-300">
+          // role="alert" so screen reader users hear that the assistant
+          // failed, instead of only sighted users noticing the red bubble.
+          <div
+            role="alert"
+            className="self-start rounded-2xl px-3 py-2 text-sm bg-red-500/10 text-red-300"
+          >
             {error}
           </div>
         )}

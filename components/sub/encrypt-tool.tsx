@@ -179,7 +179,12 @@ export const EncryptTool = () => {
       </div>
 
       {error && (
-        <p className="relative z-[5] text-xs text-red-300">{error}</p>
+        // role="alert" so screen reader users are told immediately that
+        // the run failed (e.g. wrong passphrase) — otherwise only sighted
+        // users notice the red text appear.
+        <p role="alert" className="relative z-[5] text-xs text-red-300">
+          {error}
+        </p>
       )}
 
       {output && (

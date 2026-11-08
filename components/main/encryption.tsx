@@ -2,16 +2,35 @@
 
 import { motion, useScroll, useTransform } from "framer-motion";
 import Image from "next/image";
-import { useRef } from "react";
+import { useEffect, useRef } from "react";
 
 import { EncryptTool } from "@/components/sub/encrypt-tool";
 import { HashTool } from "@/components/sub/hash-tool";
 import { SecurityBestPractices } from "@/components/sub/security-best-practices";
 import { SecurityNews } from "@/components/sub/security-news";
+import { useReducedMotion } from "@/lib/use-reduced-motion";
 
 export const Encryption = () => {
   const sectionRef = useRef<HTMLDivElement>(null);
   const headingRef = useRef<HTMLDivElement>(null);
+  const bgVideoRef = useRef<HTMLVideoElement>(null);
+  // Neither the sitewide CSS prefers-reduced-motion rule nor the
+  // framer-motion MotionConfig reaches a plain <video autoPlay loop> tag —
+  // this looping background kept animating at full speed for visitors who
+  // have that OS setting on, same gap already closed for the hero, AI, and
+  // skills section background videos.
+  const reducedMotion = useReducedMotion();
+
+  useEffect(() => {
+    const video = bgVideoRef.current;
+    if (!video) return;
+    if (reducedMotion) {
+      video.pause();
+    } else {
+      video.play().catch(() => {});
+    }
+  }, [reducedMotion]);
+
   const { scrollYProgress } = useScroll({
     target: sectionRef,
     offset: ["start end", "end start"],
@@ -43,6 +62,7 @@ export const Encryption = () => {
           footage rather than the plain starfield. */}
       <motion.div style={{ y: bgY }} className="absolute inset-0 -z-20">
         <video
+          ref={bgVideoRef}
           loop
           muted
           autoPlay

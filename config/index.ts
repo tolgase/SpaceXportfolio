@@ -9,6 +9,16 @@ const title = "Haroun Bayoudh | Senior Full Stack Developer (PHP, React, AI)";
 const description =
   "Portfolio of Haroun Bayoudh, a senior full-stack developer with 12+ years building eCommerce platforms, custom CMS solutions, and AI-integrated products with PHP, Laravel, Symfony, and React.";
 
+// Shared by the Open Graph and Twitter Card previews below — the mascot
+// used elsewhere on the site, doubling as the thumbnail link previews show
+// on LinkedIn, X, Slack, WhatsApp, etc.
+const socialPreviewImage = {
+  url: "/astronaut-buddy.png",
+  width: 640,
+  height: 625,
+  alt: "Haroun Bayoudh's AI assistant astronaut mascot",
+};
+
 export const siteConfig: Metadata = {
   // Needed so Next.js can resolve the Open Graph/Twitter metadata below into
   // absolute URLs — without it, sharing this link on LinkedIn, X, Slack,
@@ -24,12 +34,14 @@ export const siteConfig: Metadata = {
     title,
     description,
     locale: "en_US",
+    images: [socialPreviewImage],
   },
   twitter: {
     card: "summary",
     title,
     description,
     creator: "@Aaronbayou1140",
+    images: [socialPreviewImage],
   },
   keywords: [
     "reactjs",

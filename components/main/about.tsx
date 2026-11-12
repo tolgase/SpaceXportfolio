@@ -50,7 +50,7 @@ export const About = () => {
       </motion.div>
 
       <motion.div style={{ y: headingY }}>
-        <motion.h1
+        <motion.h2
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, amount: 0.6 }}
@@ -58,7 +58,7 @@ export const About = () => {
           className="text-2xl sm:text-3xl lg:text-[40px] font-semibold text-transparent bg-clip-text bg-gradient-to-r from-[var(--accent-from)] to-[var(--accent-to)] py-6 sm:py-8 text-center max-w-3xl"
         >
           Senior Full Stack Developer, PHP-focused
-        </motion.h1>
+        </motion.h2>
       </motion.div>
 
       <motion.div style={{ y: paragraphY }}>

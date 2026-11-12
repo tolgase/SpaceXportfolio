@@ -33,7 +33,12 @@ export const HeroContent = () => {
           variants={slideInFromLeft(0.5)}
           className="flex flex-col gap-6 mt-6 text-4xl sm:text-5xl lg:text-6xl text-bold text-white max-w-[600px] w-auto h-auto"
         >
-          <span>
+          {/* The site's actual h1: this hero headline is the first and most
+              prominent text on the page, but previously wasn't marked up as
+              a heading at all, while a later, smaller sub-headline in the
+              About section was the page's only h1 — screen reader users
+              navigating by heading landed past the whole hero section. */}
+          <h1>
             Turning{" "}
             <span className="text-transparent bg-clip-text bg-gradient-to-r from-[var(--accent-from)] to-[var(--accent-to)]">
               Visions
@@ -42,7 +47,7 @@ export const HeroContent = () => {
             <span className="text-transparent bg-clip-text bg-gradient-to-r from-[var(--accent-from)] to-[var(--accent-to)]">
               realities.
             </span>
-          </span>
+          </h1>
         </motion.div>
 
         <motion.p

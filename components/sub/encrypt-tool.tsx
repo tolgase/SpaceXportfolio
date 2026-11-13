@@ -146,7 +146,16 @@ export const EncryptTool = () => {
         <input
           type="password"
           value={passphrase}
-          onChange={(event) => setPassphrase(event.target.value)}
+          onChange={(event) => {
+            setPassphrase(event.target.value);
+            // The previously computed output was derived from whatever
+            // passphrase was in this field before — once it changes, that
+            // output no longer corresponds to what's shown here, so don't
+            // leave it (or a stale error) looking current. Same fix
+            // already applied to the hashing tool's input field.
+            if (output) setOutput("");
+            if (error) setError("");
+          }}
           placeholder="Passphrase"
           aria-label="Passphrase"
           // Not a login field, so don't let the browser offer to save or
@@ -156,7 +165,13 @@ export const EncryptTool = () => {
         />
         <textarea
           value={input}
-          onChange={(event) => setInput(event.target.value)}
+          onChange={(event) => {
+            setInput(event.target.value);
+            // Same staleness fix as the passphrase field above: the
+            // output/error on screen was computed from the old text.
+            if (output) setOutput("");
+            if (error) setError("");
+          }}
           placeholder={
             mode === "encrypt"
               ? "Type text to encrypt..."

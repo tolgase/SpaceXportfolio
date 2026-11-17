@@ -288,30 +288,11 @@ main section[id] {
   width: 0;
 }
 
-.line2.typing {
-  border-right: 4px solid orange;
-}
-
 .line3 {
   opacity: 0;
   animation: typing3 3s steps(50, end) forwards;
   animation-delay: 5.5s;
   width: 0;
-}
-
-.line3.typing {
-  border-right: 4px solid orange;
-}
-
-.line4 {
-  opacity: 0;
-  animation: typing4 2s steps(35, end) forwards;
-  animation-delay: 9s;
-  width: 0;
-}
-
-.line4.typing {
-  border-right: 4px solid orange;
 }
 
 @keyframes typing1 {
@@ -360,28 +341,4 @@ main section[id] {
     opacity: 1;
     border-right: none;
   }
-}
-
-@keyframes typing4 {
-  0% { 
-    width: 0; 
-    opacity: 1;
-    border-right: 4px solid orange;
-  }
-  100% { 
-    width: 100%; 
-    opacity: 1;
-    border-right: 4px solid orange;
-  }
-}
-
-.line4:last-child {
-  animation: typing4 2s steps(35, end) forwards,
-            blink .75s step-end infinite;
-  animation-delay: 9s;
-}
-
-@keyframes blink {
-  from, to { border-color: transparent }
-  50% { border-color: orange; }
 }

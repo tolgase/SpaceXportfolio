@@ -120,8 +120,15 @@ export const AiChatWidget = () => {
         </span>
       </div>
 
+      {/* role="log" + aria-live="polite" so screen reader users hear new
+          assistant replies as they arrive, not just the role="alert"
+          errors below — the greeting and any history already in the DOM
+          at mount aren't re-announced, only messages added afterwards. */}
       <div
         ref={scrollRef}
+        role="log"
+        aria-live="polite"
+        aria-label="Chat conversation"
         className="relative z-[5] flex flex-col gap-3 px-4 py-4 max-h-80 overflow-y-auto scrollbar-hidden"
       >
         {messages.map((message, index) => (
@@ -141,7 +148,12 @@ export const AiChatWidget = () => {
         ))}
 
         {isLoading && (
-          <div className="self-start rounded-2xl px-3 py-2 text-sm bg-white/10 text-gray-400">
+          // Purely decorative animated dots, no text content — keep it out
+          // of the aria-live announcements triggered by the log above.
+          <div
+            aria-hidden="true"
+            className="self-start rounded-2xl px-3 py-2 text-sm bg-white/10 text-gray-400"
+          >
             <span className="inline-flex gap-1">
               <span className="w-1.5 h-1.5 rounded-full bg-gray-400 animate-bounce [animation-delay:-0.3s]" />
               <span className="w-1.5 h-1.5 rounded-full bg-gray-400 animate-bounce [animation-delay:-0.15s]" />

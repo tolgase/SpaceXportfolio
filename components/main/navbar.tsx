@@ -23,6 +23,22 @@ export const Navbar = () => {
     return () => document.removeEventListener("keydown", handleKeyDown);
   }, [isOpen]);
 
+  // The mobile menu panel renders fixed over the page (it lives inside this
+  // navbar's own `fixed top-0` wrapper), but without this the page behind it
+  // was still scrollable — so a swipe/scroll while the menu was open moved
+  // the hidden content underneath without the menu itself appearing to move,
+  // which read as broken. Lock body scroll for as long as the menu is open
+  // and restore whatever overflow value was there before.
+  useEffect(() => {
+    if (!isOpen) return;
+    const { style } = document.body;
+    const previousOverflow = style.overflow;
+    style.overflow = "hidden";
+    return () => {
+      style.overflow = previousOverflow;
+    };
+  }, [isOpen]);
+
   return (
     <div className="w-full h-[84px] fixed top-0 shadow-lg shadow-[var(--accent-shadow)] bg-[var(--navbar-bg)] backdrop-blur-md z-50 px-4 sm:px-6 lg:px-10">
       <div className="w-full h-full flex flex-row items-center justify-between max-w-7xl m-auto">

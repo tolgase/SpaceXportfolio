@@ -32,7 +32,7 @@ export const Projects = () => {
           transition={{ duration: 0.5 }}
           className="text-2xl sm:text-3xl lg:text-[40px] font-semibold text-transparent bg-clip-text bg-gradient-to-r from-[var(--accent-from)] to-[var(--accent-to)] py-8 sm:py-12 lg:py-20 text-center"
         >
-          My latest Roles
+          My Latest Roles
         </motion.h2>
       </motion.div>
 

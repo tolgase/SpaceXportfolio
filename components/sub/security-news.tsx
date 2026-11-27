@@ -45,7 +45,13 @@ export const SecurityNews = () => {
         Latest security news
       </h3>
 
-      <div className="relative z-[5] flex flex-col gap-3">
+      {/* role="status" announces the loading/failure/loaded state to screen
+          reader users once the fetch above settles — the same gap already
+          closed for the AI chat widget's replies and the hash/encrypt
+          tools' copy status elsewhere on the site. Without it, a screen
+          reader user who had moved on to another section never learned
+          whether this widget's headlines ever arrived. */}
+      <div role="status" className="relative z-[5] flex flex-col gap-3">
         {!items && !failed && (
           <p className="text-xs text-gray-500">Loading live headlines…</p>
         )}

@@ -40,7 +40,7 @@ export const Navbar = () => {
   }, [isOpen]);
 
   return (
-    <div className="w-full h-[84px] fixed top-0 shadow-lg shadow-[var(--accent-shadow)] bg-[var(--navbar-bg)] backdrop-blur-md z-50 px-4 sm:px-6 lg:px-10">
+    <nav aria-label="Primary" className="w-full h-[84px] fixed top-0 shadow-lg shadow-[var(--accent-shadow)] bg-[var(--navbar-bg)] backdrop-blur-md z-50 px-4 sm:px-6 lg:px-10">
       <div className="w-full h-full flex flex-row items-center justify-between max-w-7xl m-auto">
         <Link
           href="/"
@@ -178,6 +178,6 @@ export const Navbar = () => {
           </motion.div>
         )}
       </AnimatePresence>
-    </div>
+    </nav>
   );
 };
